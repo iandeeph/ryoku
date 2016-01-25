@@ -5,9 +5,9 @@
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
 			<div class="col s12">
-				<a class="waves-effect waves-light btn red accent-4"><i class="material-icons left">delete</i>Delete</a>
-				<a class="waves-effect waves-light btn blue darken-4"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
-				 <a class="btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
+				<a class="waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
+				<a class="waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
+				<a class="btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
 			</div>
 			<table class="highlight">
 				<thead>
@@ -58,12 +58,12 @@
 						</td>
 						<td>
 							<div class="input-field col s12">
-								<textarea id="textarea1" class="materialize-textarea"><?php echo $titleImagesBanner; ?></textarea>
+								<textarea class="materialize-textarea"><?php echo $titleImagesBanner; ?></textarea>
 							</div>
 						</td>
 						<td>
 							<div class="input-field col s12">
-								<textarea id="textarea1" class="materialize-textarea"><?php echo $contentWord; ?></textarea>
+								<textarea class="materialize-textarea"><?php echo $contentWord; ?></textarea>
 							</div>
 						</td>
 					</tr>

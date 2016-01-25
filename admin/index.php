@@ -14,6 +14,8 @@ foreach($_POST as $key => $val) {
 }
 
 $menu = isset($_GET['menu'])?$_GET['menu']:'';
+$cat = isset($_GET['cat'])?$_GET['cat']:'';
+
 ?><!DOCTYPE html>
 <html>
   <head>
@@ -94,7 +96,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 	</header>
     <main>
     	<div class="menu-admin">
-	    	<?php
+	    <?php
 	        switch ($menu) {
 	          case 'banner':
 	            include 'home.php';
@@ -120,7 +122,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 	            include 'home.php';
 	            break;
 	        }
-	      ?>
+	    ?>
     	</div>
     	</div>
     </main>
