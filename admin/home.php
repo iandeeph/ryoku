@@ -4,6 +4,11 @@
 	</div>
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
+			<div class="col s12">
+				<a class="waves-effect waves-light btn red accent-4"><i class="material-icons left">delete</i>Delete</a>
+				<a class="waves-effect waves-light btn blue darken-4"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
+				 <a class="btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
+			</div>
 			<table class="highlight">
 				<thead>
 					<tr>
@@ -19,7 +24,7 @@
 						<td width="300px">
 							Title
 						</td>
-						<td>
+						<td width="500px">
 							Content
 						</td>
 					</tr>
@@ -49,7 +54,7 @@
 							</p>
 						</td>
 						<td>
-							<img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img">
+							<a href="<?php echo "#uploadModal".$idimages; ?>" class="modal-trigger"><img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image"></a>
 						</td>
 						<td>
 							<div class="input-field col s12">
@@ -62,6 +67,23 @@
 							</div>
 						</td>
 					</tr>
+					 <div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
+						<div class="modal-content">
+							<div class="border-bottom mb-10"><h4>Change Image</h4></div>
+							<div class="col s12 mb-30 mt-30 center container">
+								<img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image">
+								<div class="file-field input-field">
+									<div class="btn green darken-4">
+										<span>Change</span>
+										<input type="file">
+									</div>
+									<div class="file-path-wrapper">
+										<input class="file-path validate" type="text">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<?php
 							}
 						}

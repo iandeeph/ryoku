@@ -21,7 +21,7 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
 <html>
   <head>
     <!--Import Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/material-icon.css" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <link href="css/owl.carousel.css" rel="stylesheet">
