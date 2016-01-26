@@ -36,11 +36,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col s12">
-			<textarea class="materialize-textarea"><?php echo $aboutWordAbout; ?></textarea>
-		</div>
-		<div class="col s12 container">
-			<a class="right waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
+		<div class="container">
+			<div class="col s12">
+				<textarea id="wysiwygEditor" class="materialize-textarea"><?php echo $aboutWordAbout; ?></textarea>
+			</div>
+			<div class="col s12 mt-30">
+				<a class="right waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
+			</div>
 		</div>
 	</form>
 </div>

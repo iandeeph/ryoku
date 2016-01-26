@@ -21,3 +21,7 @@ jQuery(function($) {
 });
 
 CollapsibleLists.apply();
+
+tinymce.init({
+  selector: '#wysiwygEditor'
+});

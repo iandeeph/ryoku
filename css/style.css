@@ -260,3 +260,8 @@ li.collapsibleListClosed{
     margin-left:240px;
   }
 }
+
+.about-contact{
+  background:url(../images/background.png)no-repeat scroll center center #c9c3e6;
+  padding-bottom: 100px;
+}

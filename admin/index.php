@@ -25,6 +25,8 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css"  media="screen,projection"/>
     <link rel="stylesheet" href="../css/style.css">
 
+    <script src='../js/tinymce/tinymce.min.js'></script>
+
     <!-- ICON -->
     <link rel="apple-touch-icon" sizes="57x57" href="../icon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="../icon/apple-icon-60x60.png">

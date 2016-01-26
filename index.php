@@ -16,12 +16,51 @@ foreach($_POST as $key => $val) {
 $menu = isset($_GET['menu'])?$_GET['menu']:'';
 $brand = isset($_GET['brand'])?$_GET['brand']:'';
 
+$companyQry = "SELECT * FROM company LIMIT 1";
+if($resultCompanyQry = mysqli_query($conn, $companyQry)){
+  if(mysqli_num_rows($resultCompanyQry) > 0){
+    $rowCompanyQry = mysqli_fetch_array($resultCompanyQry);
+    $idcompany    = $rowCompanyQry['idcompany'];
+    $nameCompany  = $rowCompanyQry['name'];
+
+    $imagesCompanyQry = "SELECT * FROM images WHERE owner = 'company' AND idowner = '".$idcompany."' LIMIT 1";
+    if($resultImagesCompanyQry = mysqli_query($conn, $imagesCompanyQry)){
+      if(mysqli_num_rows($resultImagesCompanyQry) > 0){
+        $rowImagesCompanyQry = mysqli_fetch_array($resultImagesCompanyQry);
+        $idimagesCompany  = $rowImagesCompanyQry['idimages'];
+        $titleCompany   = $rowImagesCompanyQry['title'];
+        $pathCompany    = $rowImagesCompanyQry['path'];
+      }
+    }
+
+    $outletCompanyQry = "SELECT * FROM outlet LIMIT 1";
+    if($resultOutletCompanyQry = mysqli_query($conn, $outletCompanyQry)){
+      if(mysqli_num_rows($resultOutletCompanyQry) > 0){
+        $rowOutletCompanyQry = mysqli_fetch_array($resultOutletCompanyQry);
+        $idoutlet       = $rowOutletCompanyQry['idoutlet'];
+        $addressoutlet  = $rowOutletCompanyQry['address'];
+      }
+    }
+
+    $phoneCompanyQry = "SELECT * FROM phone WHERE idoutlet = '".$idoutlet."' LIMIT 1";
+    if($resultPhoneCompanyQry = mysqli_query($conn, $phoneCompanyQry)){
+      if(mysqli_num_rows($resultPhoneCompanyQry) > 0){
+        $rowPhoneCompanyQry = mysqli_fetch_array($resultPhoneCompanyQry);
+        $idphone      = $rowPhoneCompanyQry['idphone'];
+        $phoneCompany = $rowPhoneCompanyQry['phone'];
+        $faxCompany   = $rowPhoneCompanyQry['fax'];
+      }
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <!--Import Google Icon Font-->
     <link href="css/material-icon.css" rel="stylesheet">
+
+    <script src='js/tinymce/tinymce.min.js'></script>
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <link href="css/owl.carousel.css" rel="stylesheet">
@@ -121,7 +160,7 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
       <nav>
         <div class="nav-wrapper blue darken-2">
           <div class="container">
-            <a href="#!" class="center brand-logo"><img src="images/logo.png" width="110px"></a>
+            <a href="#!" class="center brand-logo"><img title="<?php echo $nameCompany?>" alt="<?php echo $titleCompany?>" src="<?php echo $pathCompany?>" width="110px"></a>
           </div>
         </div>
       </nav>
@@ -168,16 +207,43 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
             </div>
             <div class="col s12 center">
               <p class="grey-text darken-5-text">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-              </p>
+                <?php
+                  $contactWordQty = "SELECT contentWord FROM social LIMIT 1";
+                  if($resultWord = mysqli_query($conn, $contactWordQty)){
+                    $rowWord = mysqli_fetch_array($resultWord);
+                    echo $rowWord['contentWord'];
+                  }
+                ?>
+                </p>
             </div>
             <div class="col s12 center" style="mt-30 mb-30">
-              <a href="#">
-                <img class="responsive-img" src="images/fb.png" width="64px">
-              </a>
-              <a href="#">
-                <img class="responsive-img" src="images/blogspot.png" width="64px">
-              </a>
+              <?php
+                $socialQry = "SELECT * FROM social";
+                if($resultSocialQry = mysqli_query($conn, $socialQry)){
+                  if(mysqli_num_rows($resultSocialQry) > 0){
+                    while($rowSocial = mysqli_fetch_array($resultSocialQry)){
+                      $idsocial   = $rowSocial['idsocial'];
+                      $nameSocial = $rowSocial['name'];
+                      $linkSocial = $rowSocial['link'];
+
+                      $imagesSocialQry = "SELECT * FROM images WHERE (owner = 'social' and idowner = '".$idsocial."')";
+                      if($resultImagesSocial = mysqli_query($conn, $imagesSocialQry)){
+                        if(mysqli_num_rows($resultImagesSocial) > 0){
+                          while($rowImagesSocial = mysqli_fetch_array($resultImagesSocial)){
+                            $idimages     = $rowImagesSocial['idimages'];
+                            $pathSocial   = $rowImagesSocial['path'];
+                            ?>
+                              <a href="<?php echo $linkSocial; ?>">
+                                <img class="responsive-img" alt="<?php echo $nameSocial; ?>" title="<?php echo $nameSocial; ?>" src="<?php echo $pathSocial; ?>" width="64px">
+                              </a>
+                            <?php
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ?>
             </div>
           </div>
         </div>
@@ -197,7 +263,7 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
               </div>
               <div style="margin-left:50px">
                 <p class="grey-text text-lighten-4">
-                  (+62 21) 5576 2060
+                  <?php echo $phoneCompany; ?>
                 </p>  
               </div>
               <div>
@@ -205,8 +271,7 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
               </div>
               <div style="margin-left:50px">
                 <p class="grey-text text-lighten-4">
-                  GEDUNG HARKOT, Lantai Dasar Blok B5 No.02<br/>
-                  Jl. Raya Merdeka No.53, Kel. Sukajadi Kec. Karawaci - Tangerang 15111<br/>
+                  <?php echo $addressoutlet; ?>
                 </p>  
               </div>
           </div>
@@ -216,7 +281,7 @@ $brand = isset($_GET['brand'])?$_GET['brand']:'';
       <div class="footer-copyright blue darken-4">
         <div class="container">
           &copy 2016 All Right Reserved
-          <a class="grey-text text-lighten-4 right" href="#!">CV. RYOKU PETROJAYA MANDIRI</a>
+          <a class="grey-text text-lighten-4 right" href="#!"><?php echo $nameCompany; ?></a>
         </div>
       </div>
     </footer>

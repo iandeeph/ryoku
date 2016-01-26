@@ -58,7 +58,7 @@
 						</td>
 						<td>
 							<div class="input-field col s12">
-								<textarea class="materialize-textarea"><?php echo $titleImagesBanner; ?></textarea>
+								<input class="validate" value="<?php echo $titleImagesBanner; ?>">
 							</div>
 						</td>
 						<td>
