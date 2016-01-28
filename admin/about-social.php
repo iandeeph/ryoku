@@ -72,7 +72,7 @@
 												<div class="modal-content">
 													<div class="border-bottom mb-10"><h4>Change Image</h4></div>
 													<div class="col s12 mb-30 mt-30 center container">
-														<img src="<?php echo "../".$pathImagesSocial; ?>" class="responsive-img" title="klick to change image">
+														<img src="<?php echo "../".$pathImagesSocial; ?>" width="50%" class="responsive-img" title="klick to change image">
 														<div class="file-field input-field">
 															<div class="btn green darken-4">
 																<span>Change</span>

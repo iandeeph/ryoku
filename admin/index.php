@@ -54,18 +54,18 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 		<div class="navbar-fixed">
 			<nav>
 				<div class="nav-wrapper navbar-fixed grey darken-3 valign-wrapper">
-					<a href="#" data-activates="side-menu" class="button-collapse left"><i class="material-icons">menu</i></a>
+					<a href="#" data-activates="side-menu" class="button-collapse left"><i class="menu-side-icon material-icons">menu</i></a>
 					<a href="#!" class="center brand-logo"><img src="../images/logo.png" width="110px"></a>
 					<div style="width:100%" class="hide-on-med-and-down"><h4 class="right-align mr-30">Admin Control Panel</h4></div>
 				</div>
 			</nav>
 		</div>
 		<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px">
-			<li class="bold"><a href="./index.php?menu=banner"><i class="material-icons mt-20 left">home</i>Home Banner</a></li>
+			<li class="bold"><a href="./index.php?menu=banner"><i class="menu-side-icon material-icons mt-20 left">home</i>Home Banner</a></li>
 			<li class="bold no-padding">
 				<ul class="collapsible" data-colapsible="accordion">
 				  <li>
-				    <a class="collapsible-header"><i class="material-icons left">business</i>About</a>
+				    <a class="collapsible-header"><i class="menu-side-icon material-icons left">business</i>About</a>
 				    <div class="collapsible-body">
 				      <ul>
 				        <li class="bold"><a href="./index.php?menu=about&cat=company">Company Profile</a></li>
@@ -81,7 +81,21 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 			<li class="bold no-padding">
 				<ul class="collapsible" data-colapsible="accordion">
 				  <li>
-				    <a class="collapsible-header"><i class="material-icons left">toys</i>Product</a>
+				    <a class="collapsible-header"><i width="100px" class="menu-side-icon material-icons left">collections</i>Gallery</a>
+				    <div class="collapsible-body">
+				      <ul>
+				        <li class="bold"><a href="./index.php?menu=gallery&cat=service">Service</a></li>
+				        <li class="bold"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
+				        <li class="bold"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
+				      </ul>
+				    </div>
+				  </li> 
+				</ul>
+			</li>
+			<li class="bold no-padding">
+				<ul class="collapsible" data-colapsible="accordion">
+				  <li>
+				    <a class="collapsible-header"><i class="menu-side-icon material-icons left">toys</i>Product</a>
 				    <div class="collapsible-body">
 				      <ul>
 				        <li class="bold"><a href="./index.php?menu=product&cat=brand">Brand</a></li>
@@ -91,9 +105,9 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 				  </li> 
 				</ul>
 			</li>
-			<li class="bold"><a href="./index.php?menu=project"><i class="material-icons mt-20 left">work</i>Project</a></li>
-			<li class="bold"><a href="./index.php?menu=user"><i class="material-icons mt-20 left">person</i>User</a></li>
-			<li class="bold"><a href="./index.php?menu=visitor"><i class="material-icons mt-20 left">contact_mail</i>Visitor</a></li>
+			<li class="bold"><a href="./index.php?menu=project"><i class="menu-side-icon material-icons mt-20 left">work</i>Project</a></li>
+			<li class="bold"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
+			<li class="bold"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>
 		</ul>
 	</header>
     <main>
@@ -108,20 +122,28 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 	            include 'about.php';
 	            break;
 	          
+	          case 'gallery':
+	            include 'gallery.php';
+	            break;
+
 	          case 'product':
 	            include 'product.php';
 	            break;
 
-	          case 'user':
-	            include 'contact.php';
-	            break;
-
-	          case 'visitor':
+	          case 'project':
 	            include 'project.php';
 	            break;
 
+	          case 'user':
+	            include 'user.php';
+	            break;
+
+	          case 'visitor':
+	            include 'visitor.php';
+	            break;
+
 	          default:
-	            include 'home.php';
+	            include 'login.php';
 	            break;
 	        }
 	    ?>

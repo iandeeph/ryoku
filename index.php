@@ -234,7 +234,7 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
                             $pathSocial   = $rowImagesSocial['path'];
                             ?>
                               <a href="<?php echo $linkSocial; ?>">
-                                <img class="responsive-img" alt="<?php echo $nameSocial; ?>" title="<?php echo $nameSocial; ?>" src="<?php echo $pathSocial; ?>" width="64px">
+                                <img class="responsive-img" alt="<?php echo $nameSocial; ?>" title="<?php echo $nameSocial; ?>" src="<?php echo $pathSocial; ?>" width="64">
                               </a>
                             <?php
                           }

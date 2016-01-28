@@ -46,27 +46,36 @@
         <h3 class="grey-text">SERVICE</h3>
       </div>
       <div class="col s12 center">
-        <div class="col s12 m6 l4 center">
-          <img class="" src="images/pic.jpg" alt="Our Services">
-          <p class="center">
-            Ini yang kami kerjakan.. Melakukan pengelasan bla bla bla bla 
-          </p>
-          <a class="waves-effect waves-light btn mb-30 blue darken-3">Detail</a>
-        </div>
-        <div class="col s12 m6 l4 center">
-          <img class="" src="images/pic1.jpg" alt="Our Services">
-          <p class="center">
-            Ini yang kami kerjakan.. Melakukan pengelasan bla bla bla bla 
-          </p>
-          <a class="waves-effect waves-light btn mb-30 blue darken-3">Detail</a>
-        </div>
-        <div class="col s12 m6 l4 center">
-          <img class="" src="images/pic2.jpg" alt="Our Services">
-          <p class="center">
-            Ini yang kami kerjakan.. Melakukan pengelasan bla bla bla bla 
-          </p>
-          <a class="waves-effect waves-light btn mb-30 blue darken-3">Detail</a>
-        </div>
+        <?php
+          if($resultServiceQry = mysqli_query($conn, "SELECT * FROM service")){
+            if (mysqli_num_rows($resultServiceQry) > 0) {
+              while ($rowService = mysqli_fetch_array($resultServiceQry)) {
+                $idservice          = $rowService['idservice'];
+                $nameService        = $rowService['name'];
+                $contentWordService = $rowService['contentWord'];
+
+                $imagesServiceQry = "SELECT * FROM images WHERE (owner = 'Service' AND idowner = '".$idservice."') LIMIT 1";
+                
+                if ($resultImagesServiceQry = mysqli_query($conn, $imagesServiceQry)) {
+                  if (mysqli_num_rows($resultImagesServiceQry) > 0) {
+                    $rowImagesService = mysqli_fetch_array($resultImagesServiceQry);
+                    $idimages           = $rowImagesService['idimages'];
+                    $titleImagesService = $rowImagesService['title'];
+                    $pathImagesService  = $rowImagesService['path'];
+                    ?>
+                    <div class="col s12 m6 l4 center">
+                      <img class="responsive-img" alt="<?php echo $titleImagesService;?>" title="<?php echo $nameService;?>" src="<?php echo $pathImagesService;?>">
+                      <p class="center">
+                        <?php echo $contentWordService;?>
+                      </p>
+                    </div>
+                    <?php
+                  }
+                }
+              }
+            }
+          }
+        ?>
       </div>
     </div>
   </div>

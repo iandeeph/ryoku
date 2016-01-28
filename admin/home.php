@@ -67,7 +67,7 @@
 							</div>
 						</td>
 					</tr>
-					 <div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
+					<div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
 						<div class="modal-content">
 							<div class="border-bottom mb-10"><h4>Change Image</h4></div>
 							<div class="col s12 mb-30 mt-30 center container">

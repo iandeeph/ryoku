@@ -2,52 +2,96 @@
 	<div class="col s12 center">
       	<h3 class="black-text">OUR PROJECT</h3>
     </div>
-	<div class="col hide-on-small-and-down l2 pinned">
+	<div class="col hide-on-med-and-down l2 pinned">
 		<ul class="section table-of-contents">
-			<li><a href="#project1">Project 1</a></li>
-			<li><a href="#project2">Project 2</a></li>
-			<li><a href="#project3">Project 3</a></li>
+			<?php
+				$titleProjectQry = "SELECT idproject, name FROM project";
+				if($resultTitleProject = mysqli_query($conn, $titleProjectQry)){
+					if(mysqli_num_rows($resultTitleProject) > 0){
+						while($rowResultTitleProject = mysqli_fetch_array($resultTitleProject)){
+							$idproject 		= $rowResultTitleProject['idproject'];
+							$nameProject 	= $rowResultTitleProject['name'];
+
+							?>
+							<li><a href="<?php echo "#".$idproject; ?>"><?php echo $nameProject; ?></a></li>
+							<?php
+						}
+					}
+				}
+			?>
 		</ul>
 	</div>
 	<div class="container">
 		<div class="col s12 m12 l12">
-			<div id="project1" class="section scrollspy mb-30">
-				<h5 class="border-bottom pdb-30 blue-text darken-2-text">Project 1</h5>
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic2.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<p style="text-align:justify">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porta porttitor magna sed iaculis. Aenean hendrerit viverra nunc, et viverra nunc. Aenean dolor risus, finibus eu tempor nec, congue quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque quis feugiat mauris, tristique rhoncus massa. Fusce faucibus varius turpis, eget suscipit massa condimentum at. Fusce volutpat risus eu mauris sagittis porta. Mauris vehicula risus eu urna facilisis aliquam. Morbi viverra, nisi a ultricies hendrerit, libero velit fermentum diam, quis accumsan risus ipsum ut felis. Vivamus ac orci ligula. Vestibulum vitae augue luctus, congue enim ut, mattis arcu. Vivamus nisi velit, interdum at pulvinar auctor, elementum vel nisi. Nulla ultrices ac elit ac molestie. Phasellus iaculis lobortis rhoncus. Phasellus sagittis elit nec velit pellentesque, a imperdiet nibh varius.
-				</p>
-				<a class="waves-effect waves-light btn blue darken-3">More Image on Gallery</a>
-			</div>
+			<?php
+				$projectQry = "SELECT * FROM project";
+				if($resultProject = mysqli_query($conn, $projectQry)){
+					if(mysqli_num_rows($resultProject) > 0){
+						while($rowResultProject = mysqli_fetch_array($resultProject)){
+							$idproject 			= $rowResultProject['idproject'];
+							$nameProject 		= $rowResultProject['name'];
+							$locationProject 	= $rowResultProject['location'];
+							$dateProject 		= $rowResultProject['date'];
+							$idCategoryProject 	= $rowResultProject['idcategory'];
+							$contentProject 	= $rowResultProject['contentWord'];
 
-			<div id="project2" class="section scrollspy mb-30">
-				<h5 class="border-bottom pdb-30 blue-text darken-2-text">Project 1</h5>
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic2.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<p style="text-align:justify">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porta porttitor magna sed iaculis. Aenean hendrerit viverra nunc, et viverra nunc. Aenean dolor risus, finibus eu tempor nec, congue quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque quis feugiat mauris, tristique rhoncus massa. Fusce faucibus varius turpis, eget suscipit massa condimentum at. Fusce volutpat risus eu mauris sagittis porta. Mauris vehicula risus eu urna facilisis aliquam. Morbi viverra, nisi a ultricies hendrerit, libero velit fermentum diam, quis accumsan risus ipsum ut felis. Vivamus ac orci ligula. Vestibulum vitae augue luctus, congue enim ut, mattis arcu. Vivamus nisi velit, interdum at pulvinar auctor, elementum vel nisi. Nulla ultrices ac elit ac molestie. Phasellus iaculis lobortis rhoncus. Phasellus sagittis elit nec velit pellentesque, a imperdiet nibh varius.
-				</p>
-				<a class="waves-effect waves-light btn blue darken-3">More Image Gallery</a>
-			</div>
-
-			<div id="project3" class="section scrollspy mb-30">
-				<h5 class="border-bottom pdb-30 blue-text darken-2-text">Project 1</h5>
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic2.jpg">
-				<img class="materialboxed responsive-img col s12 m6 l3 mt-30 mb-30" src="images/pic1.jpg">
-				<p style="text-align:justify">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porta porttitor magna sed iaculis. Aenean hendrerit viverra nunc, et viverra nunc. Aenean dolor risus, finibus eu tempor nec, congue quis sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque quis feugiat mauris, tristique rhoncus massa. Fusce faucibus varius turpis, eget suscipit massa condimentum at. Fusce volutpat risus eu mauris sagittis porta. Mauris vehicula risus eu urna facilisis aliquam. Morbi viverra, nisi a ultricies hendrerit, libero velit fermentum diam, quis accumsan risus ipsum ut felis. Vivamus ac orci ligula. Vestibulum vitae augue luctus, congue enim ut, mattis arcu. Vivamus nisi velit, interdum at pulvinar auctor, elementum vel nisi. Nulla ultrices ac elit ac molestie. Phasellus iaculis lobortis rhoncus. Phasellus sagittis elit nec velit pellentesque, a imperdiet nibh varius.
-				</p>
-				<a class="waves-effect waves-light btn blue darken-3">More Image Gallery</a>
-			</div>
+							$categoryQry = "SELECT * FROM category WHERE idcategory = '".$idCategoryProject."' LIMIT 1";
+							if($resultCategory = mysqli_query($conn, $categoryQry)){
+								if(mysqli_num_rows($resultCategory) > 0){
+									$rowResultCategory = mysqli_fetch_array($resultCategory);
+									$mainCategory 	= $rowResultCategory['main'];
+									$subCategory 	= $rowResultCategory['sub'];
+									?>
+									<div id="<?php echo $idproject; ?>" class="section scrollspy mb-30">
+										<div class="col s12 border-bottom">
+											<h5 class="blue-text darken-2-text"><?php echo $nameProject; ?></h5>
+											<div class="col s6 m6 l4">
+												<span>Date : <?php echo $dateProject; ?></span><br>
+												<span>Location : <?php echo $locationProject; ?></span>
+											</div>
+											<div class="col s6 m6 l4">
+												<span>Category : <a href="#"><?php echo $mainCategory; ?></a></span><br>
+												<span>Sub Category : <a href="#"><?php echo $subCategory; ?></a></span>
+											</div>
+										</div>
+										<div class="col s12">
+											<div class="slider mt-30">
+												<ul class="slides">
+													<?php
+													$imagesProjectQry = "SELECT path FROM images WHERE (owner = 'project' AND idowner = '".$idproject."')";
+													if ($resultImagesProjectQry = mysqli_query($conn, $imagesProjectQry)) {
+										            	if (mysqli_num_rows($resultImagesProjectQry) > 0) {
+															while($rowImagesProject 	= mysqli_fetch_array($resultImagesProjectQry)){
+																$pathImagesProject  = $rowImagesProject['path'];
+																?>
+																	<li>
+																		<img src="<?php echo $pathImagesProject; ?>">
+																	</li>
+																<?php
+															}
+														}
+													}
+													?>
+												</ul>
+											</div>
+										</div>
+										<div class="col s12">
+											<p style="text-align:justify">
+												<?php echo $contentProject; ?>
+											</p>
+										</div>
+										<a class="waves-effect waves-light btn blue darken-3">More Image on Gallery</a>
+									</div>
+									<?php
+								}
+							}
+						}
+					}
+				}
+			?>
 		</div>
 	</div>
+</div>
 <div class="row">
 	<div class="col s12">
 		<div class="center">

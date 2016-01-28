@@ -37,14 +37,16 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
   }
 }
 ?>
-<div class="row about-contact">
+<div class="row">
 	<div class="col s12 border-bottom grey lighten-2 mb-50">
 		<h3 class="left-align">Company Contact</h3>
 	</div>
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
-			<div class="col s12">
-				<img width="300px" class="responsive-img img-center mb-30" src="<?php echo "../".$pathCompany; ?>" alt="<?php echo $titleCompany; ?>" title="<?php echo $nameCompany; ?>">
+			<div class="col s12 center">
+				<div class="border-dotted">
+					<img width="300px" class="responsive-img img-center mb-30" src="<?php echo "../".$pathCompany; ?>" alt="<?php echo $titleCompany; ?>" title="<?php echo $nameCompany; ?>">
+				</div>
 				<div class="file-field input-field container">
 					<div class="btn green darken-4">
 						<span>Change</span>
