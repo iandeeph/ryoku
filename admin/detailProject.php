@@ -92,7 +92,7 @@
 		<label for="dateProject">Date Project</label>
 	</div>
 	<div class="input-field col s12 m6 l6">
-		<select>
+		<select class="mainCatProject" name="mainCatProject">
 			<option value="" disabled>Select Main Category</option>
 			<?php
 				$mainCatQry = "SELECT idcategory, main FROM category WHERE owner = 'project' GROUP BY main";
@@ -111,12 +111,13 @@
 			?>
 		</select>
 		<label>Main Category</label>
+		<div class="col s12"><a href="#modalAddMainCat" class="modal-trigger">[+]Add Main Category</a></div>
 	</div>
 	<div class="input-field col s12 m6 l6">
-		<select>
-			<option value="" disabled>Select Sub Category</option>
+		<select class="subCatProject" name="subCatProject">
+			<option selected disabled>Select Sub Category</option>
 			<?php
-				$subCatQry = "SELECT idcategory, sub FROM category WHERE owner = 'project' AND main = '".$mainDetCategory."' AND sub IS NOT NULL AND sub != ''";
+				$subCatQry = "SELECT idcategory, sub, main FROM category WHERE owner = 'project' AND main = '".$mainDetCategory."' AND sub IS NOT NULL AND sub != '' GROUP BY sub";
 				if ($resultSubCat = mysqli_query($conn, $subCatQry)) {
 		        	if (mysqli_num_rows($resultSubCat) > 0) {
 						while($rowSubCat 	= mysqli_fetch_array($resultSubCat)){
@@ -132,11 +133,41 @@
 			?>
 		</select>
 		<label>Sub Category</label>
+		<div class="col s12"><a href="#modalAddSubCat" class="modal-trigger">[+]Add Sub Category</a></div>
 	</div>
-	<div class="input-field col s12">
+	<div class="input-field col s12 mt-30">
 		<textarea id="wysiwygEditor" class="materialize-textarea"><?php echo $contentWordDetProject; ?></textarea>
 	</div>
 	<div class="col s12">
 		<a class="mt-30 right waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
+	</div>
+</div>
+<div id="modalAddMainCat" class="modal">
+	<div class="modal-content">
+		<div class="border-bottom mb-10"><h4>Add Main Category</h4></div>
+		<div class="col s12 mt-30 center container">
+			<div class="file-field input-field">
+				<input id="addMainProjectCategory" name="addMainProjectCategory" type="text" class="validate">
+				<label for="addMainProjectCategory">Main Category</label>
+			</div>
+			<div class="input-field col s12 mb-50">
+				<a class="waves-effect waves-light btn green darken-4 right">Add</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modalAddSubCat" class="modal">
+	<div class="modal-content">
+		<div class="border-bottom mb-10"><h4>Add Sub Category</h4></div>
+		<span>[Main Category : <?php echo $mainDetCategory;?>]</span>
+		<div class="col s12 mt-30 center container">
+			<div class="file-field input-field">
+				<input id="addSubProjectCategory" name="addSubProjectCategory" type="text" class="validate">
+				<label for="addSubProjectCategory">Sub Category</label>
+			</div>
+			<div class="input-field col s12 mb-50">
+				<a class="waves-effect waves-light btn green darken-4 right">Add</a>
+			</div>
+		</div>
 	</div>
 </div>

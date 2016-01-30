@@ -17,9 +17,9 @@ $(document).ready(function() {
   $('.slider').slider({full_width: false});
   $('select').material_select();
 
-});
-jQuery(function($) {
-  $(".swipebox").swipebox();
+  jQuery(function($) {
+    $(".swipebox").swipebox();
+  });
 });
 
 CollapsibleLists.apply();

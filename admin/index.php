@@ -60,7 +60,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 				</div>
 			</nav>
 		</div>
-		<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px">
+		<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px; height:90%">
 			<li class="bold"><a href="./index.php?menu=banner"><i class="menu-side-icon material-icons mt-20 left">home</i>Home Banner</a></li>
 			<li class="bold no-padding">
 				<ul class="collapsible" data-colapsible="accordion">
@@ -97,7 +97,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 				  <li>
 				    <a class="collapsible-header"><i class="menu-side-icon material-icons left">toys</i>Product</a>
 				    <div class="collapsible-body">
-				      <ul>
+				      <ul>q
 				        <li class="bold"><a href="./index.php?menu=product&cat=brand">Brand</a></li>
 				        <li class="bold"><a href="./index.php?menu=product&cat=list">List Product</a></li>
 				      </ul>
@@ -150,6 +150,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     	</div>
     	</div>
     </main>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script src="../js/owl.carousel.js"></script>
