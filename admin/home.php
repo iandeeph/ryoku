@@ -1,3 +1,66 @@
+<?php
+	if(isset($_POST['btnAddNewBanner'])){
+		$postTitleBanner = mysqli_real_escape_string($conn, $_POST['addBannerTitle']);
+		$postContentWordBanner = mysqli_real_escape_string($conn, $_POST['addBannerContentWord']);
+
+		$target_dir = "../images/";
+		$target_file = $target_dir . basename($_FILES["addImageFile"]["name"]);
+		$filePath = "images/" . basename($_FILES["addImageFile"]["name"]);
+		$uploadOk = 1;
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+		// Check if image file is a actual image or fake image
+	    $check = getimagesize($_FILES["addImageFile"]["tmp_name"]);
+	    if($check !== false) {
+	        $postMessages = "File is an image - " . $check["mime"] . ".";
+	        $colorMessages = "green-text";
+	        $uploadOk = 1;
+	    } else {
+	        $uploadImages = "File is not an image.";
+	        $colorMessages = "red-text";
+	        $uploadOk = 0;
+	    }
+		// Allow certain file formats
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+		&& $imageFileType != "gif" ) {
+		    $postMessages = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+	        $colorMessages = "green-text";
+		    $uploadOk = 0;
+		}
+		// Check if $uploadOk is set to 0 by an error
+		if ($uploadOk == 0) {
+		    $postMessages = "Sorry, your file was not uploaded.";
+	        $colorMessages = "red-text";
+		// if everything is ok, try to upload file
+		} else {
+		    if (move_uploaded_file($_FILES["addImageFile"]["tmp_name"], $target_file)) {
+				$insertAddBanner = "INSERT INTO banner (contentWord) VALUES ('".$postContentWordBanner."')";
+				if(mysqli_query($conn, $insertAddBanner)){
+					$LastIdBanner = mysqli_insert_id($conn);
+
+					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('".$postTitleBanner."', '".$filePath."','banner','".$LastIdBanner."')";
+					if(mysqli_query($conn, $insertAddImages)){
+
+						$postMessages = "New banner added";
+				        $colorMessages = "green-text";
+				        header('Location: ./index.php?menu=banner');
+				    }else{
+				    	$postMessages = "ERROR: Could not able to execute ".$insertAddImages.". " . mysqli_error($conn);
+			        	$colorMessages = "red-text";
+				    }
+				} else{
+					$postMessages = "ERROR: Could not able to execute ".$insertAddBanner.". " . mysqli_error($conn);
+			        $colorMessages = "red-text";
+				}
+		    } else {
+		        $postMessages = "Sorry, there was an error uploading your file.";
+	        	$colorMessages = "red-text";
+		    }
+		}
+	}else{
+		$postMessages = "";
+		$colorMessages = "";
+	}
+?>
 <div class="row">
 	<div class="col s12 border-bottom grey lighten-2 mb-50">
 		<h3 class="left-align">Top Banner</h3>
@@ -7,7 +70,10 @@
 			<div class="col s12">
 				<a class="waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
 				<a class="waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</a>
-				<a class="btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
+				<a href="#modalAddBannerItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
+			</div>
+			<div class="col s12">
+				<span class="<?php echo $colorMessages;?>"><?php echo $postMessages;?></span>
 			</div>
 			<table class="highlight">
 				<thead>
@@ -31,66 +97,153 @@
 				</thead>
 				<tbody>
 					<?php
-					if($resultBannerQry = mysqli_query($conn, "SELECT * FROM banner")){
-				        if (mysqli_num_rows($resultBannerQry) > 0) {
-				          while ($rowBanner = mysqli_fetch_array($resultBannerQry)) {
-				            $idbanner = $rowBanner['idbanner'];
-				            $contentWord = $rowBanner['contentWord'];
+						if($resultBannerQry = mysqli_query($conn, "SELECT * FROM banner ORDER BY idbanner DESC")){
+					        if (mysqli_num_rows($resultBannerQry) > 0) {
+					          	while ($rowBanner = mysqli_fetch_array($resultBannerQry)) {
+						            $idbanner = $rowBanner['idbanner'];
+						            $contentWord = $rowBanner['contentWord'];
 
-				            $imagesBannerQry = "SELECT * FROM images WHERE (owner = 'banner' AND idowner = '".$idbanner."') LIMIT 1";
-				            
-				            if ($resultImagesBannerQry = mysqli_query($conn, $imagesBannerQry)) {
-								$rowImagesBanner = mysqli_fetch_array($resultImagesBannerQry);
-				            	$idimages 			= $rowImagesBanner['idimages'];
-								$titleImagesBanner  = $rowImagesBanner['title'];
-								$pathImagesBanner   = $rowImagesBanner['path'];
-				            }
-					?>
-					<tr>
-						<td>
-							<p>
-								<input type="checkbox" id="<?php echo $idimages; ?>" />
-								<label for="<?php echo $idimages; ?>"></label>
-							</p>
-						</td>
-						<td>
-							<a href="<?php echo "#uploadModal".$idimages; ?>" class="modal-trigger"><img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image"></a>
-						</td>
-						<td>
-							<div class="input-field col s12">
-								<input class="validate" value="<?php echo $titleImagesBanner; ?>">
-							</div>
-						</td>
-						<td>
-							<div class="input-field col s12">
-								<textarea class="materialize-textarea"><?php echo $contentWord; ?></textarea>
-							</div>
-						</td>
-					</tr>
-					<div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
-						<div class="modal-content">
-							<div class="border-bottom mb-10"><h4>Change Image</h4></div>
-							<div class="col s12 mb-30 mt-30 center container">
-								<img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image">
-								<div class="file-field input-field">
-									<div class="btn green darken-4">
-										<span>Change</span>
-										<input type="file">
-									</div>
-									<div class="file-path-wrapper">
-										<input class="file-path validate" type="text">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php
+						            $imagesBannerQry = "SELECT * FROM images WHERE (owner = 'banner' AND idowner = '".$idbanner."') LIMIT 1";
+						            
+						            if ($resultImagesBannerQry = mysqli_query($conn, $imagesBannerQry)) {
+										$rowImagesBanner = mysqli_fetch_array($resultImagesBannerQry);
+						            	$idimages 			= $rowImagesBanner['idimages'];
+										$titleImagesBanner  = $rowImagesBanner['title'];
+										$pathImagesBanner   = $rowImagesBanner['path'];
+										?>
+											<tr>
+												<td>
+													<p>
+														<input type="checkbox" id="<?php echo $idimages; ?>" />
+														<label for="<?php echo $idimages; ?>"></label>
+													</p>
+												</td>
+												<td>
+													<a href="<?php echo "#uploadModal".$idimages; ?>" class="modal-trigger"><img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image"></a>
+												</td>
+												<td>
+													<div class="input-field col s12">
+														<input class="validate" value="<?php echo $titleImagesBanner; ?>">
+													</div>
+												</td>
+												<td>
+													<div class="input-field col s12">
+														<textarea class="materialize-textarea"><?php echo $contentWord; ?></textarea>
+													</div>
+												</td>
+											</tr>
+											<div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
+												<div class="modal-content">
+													<div class="border-bottom mb-10"><h4>Change Image</h4></div>
+													<div class="col s12 mb-30 mt-30 center container">
+														<div class="file-field input-field">
+														<img src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image">
+															<div class="col s12">
+																<div class="btn green darken-4">
+																	<span>Change</span>
+																	<input id="<?php echo "changeImagesFile".$idimages; ?>" name="<?php echo "changeImagesFile".$idimages; ?>" type="file">
+																</div>
+																<div class="file-path-wrapper">
+																	<input id="<?php echo "changeIMagesPath".$idimages; ?>" name="<?php echo "changeIMagesPath".$idimages; ?>" class="file-path validate" type="text">
+																</div>
+															</div>
+															<div class="col s12">
+																<button type="submit" id="<?php echo "btnChangeImages".$idimages; ?>" name="<?php echo "btnChangeImages".$idimages; ?>" class="waves-effect waves-light btn blue darken-4 right"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										<?php
+										$btnChangeImages = "btnChangeImages".$idimages;
+										$changeImagesFile = "changeImagesFile".$idimages;
+										if(isset($_POST[$btnChangeImages])){
+											$target_dir = "../images/";
+											$target_file = $target_dir . basename($_FILES[$changeImagesFile]["name"]);
+											$filePath = "images/" . basename($_FILES[$changeImagesFile]["name"]);
+											$uploadOk = 1;
+											$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+											// Check if image file is a actual image or fake image
+										    $check = getimagesize($_FILES[$changeImagesFile]["tmp_name"]);
+										    if($check !== false) {
+										        $postMessages = "File is an image - " . $check["mime"] . ".";
+										        $colorMessages = "green-text";
+										        $uploadOk = 1;
+										    } else {
+										        $uploadImages = "File is not an image.";
+										        $colorMessages = "red-text";
+										        $uploadOk = 0;
+										    }
+											// Allow certain file formats
+											if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+											&& $imageFileType != "gif" ) {
+											    $postMessages = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+										        $colorMessages = "green-text";
+											    $uploadOk = 0;
+											}
+											// Check if $uploadOk is set to 0 by an error
+											if ($uploadOk == 0) {
+											    $postMessages = "Sorry, your file was not uploaded.";
+										        $colorMessages = "red-text";
+											// if everything is ok, try to upload file
+											} else {
+											    if (move_uploaded_file($_FILES[$changeImagesFile]["tmp_name"], $target_file)) {
+													$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE idimages = '".$idimages."'";
+													if(mysqli_query($conn, $updateChangeImagesFile)){
+
+														$postMessages = "Images Updated";
+												        $colorMessages = "green-text";
+				        								header('Location: ./index.php?menu=banner');
+												    }else{
+												    	$postMessages = "ERROR: Could not able to execute ".$updateChangeImagesFile.". " . mysqli_error($conn);
+											        	$colorMessages = "red-text";
+												    }
+											    } else {
+											        $postMessages = "Sorry, there was an error changing your file.";
+										        	$colorMessages = "red-text";
+											    }
+											}
+										}else{
+											$postMessages = "";
+											$colorMessages = "";
+										}
+						            }
+								}
 							}
 						}
-					}
 					?>
 				</tbody>
 			</table>
 		</form>
+		<div id="modalAddBannerItems" class="modal">
+			<div class="modal-content">
+				<div class="border-bottom mb-10"><h4>Add Top Banner</h4></div>
+				<div class="col s12 mt-30 center container">
+					<form action="#" method="post" enctype="multipart/form-data">
+						<div class="file-field input-field col s12">
+							<img id="image_upload_preview" max-width="500px" class="image_upload_preview responsive-img img-center mb-30" src="<?php echo "../images/emptyimages.bmp"; ?>">
+							<div class="btn green darken-4">
+								<span>Upload Image</span>
+								<input id="addImageFile" name="addImageFile" type="file">
+							</div>
+							<div class="file-path-wrapper">
+								<input id="addImagesPath" name="addImagesPath" class="file-path validate" type="text">
+							</div>
+						</div>
+						<div class="file-field input-field col s12">
+							<input id="addBannerTitle" name="addBannerTitle" type="text" class="validate" required>
+							<label for="addBannerTitle">Banner Title</label>
+						</div>
+						<div class="file-field input-field col s12">
+							<textarea id="addBannerContentWord" name="addBannerContentWord" class="materialize-textarea" required></textarea>
+							<label for="addBannerContentWord">Banner Content Word</label>
+						</div>
+						<div class="input-field col s12 mb-50">
+							<button type="submit" name="btnAddNewBanner" class="waves-effect waves-light btn green darken-4 right">Add</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

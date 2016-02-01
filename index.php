@@ -118,8 +118,6 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
                 <div class="col l9 right">
                   <ul id="galleryDropDown" class="dropdown-content mt-50">
                     <li><a href="./index.php?menu=gallery&cat=project">Project</a></li>
-                    <li><a href="./index.php?menu=gallery&cat=service">Service</a></li>
-                    <li class="divider"></li>
                     <li><a href="./index.php?menu=gallery&cat=product">Product</a></li>
                   </ul>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">

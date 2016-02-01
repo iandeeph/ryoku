@@ -3,7 +3,7 @@
   <div class="s12">
     <div id="owl-demo" class="owl-carousel" style="opacity: 1; display: block;">
       <?php
-      if($resultBannerQry = mysqli_query($conn, "SELECT * FROM banner")){
+      if($resultBannerQry = mysqli_query($conn, "SELECT * FROM banner ORDER BY idbanner DESC")){
         if (mysqli_num_rows($resultBannerQry) > 0) {
           while ($rowBanner = mysqli_fetch_array($resultBannerQry)) {
             $idbanner = $rowBanner['idbanner'];

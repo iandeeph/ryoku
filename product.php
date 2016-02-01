@@ -1,10 +1,8 @@
 <div class="row">
 	<div class="col s12 center">
-      <h3 class="black-text">OUR PRODUCT</h3>
+      	<h3 class="black-text">OUR PRODUCT</h3>
     </div>
-    <div class="col l3 hide-on-med-and-down">
-    	<div class="col s12">
-    	</div>
+    <div class="col l2 hide-on-med-and-down">
     	<div class="col s12 grey-text darken-4-text">
     		<ul class="treeView">
     			<li>
@@ -41,7 +39,7 @@
 														    				<a href="#"><span class="grey-text darken-4-text"><?php echo $mainCatBrand;?></span></a>
 														    				<ul>
 															    				<?php
-															    					$brandSubCatQry = "SELECT idcategory, sub FROM category WHERE idowner = '".$idbrandTree."' AND owner = 'product' AND sub IS NOT NULL AND sub != ''";
+															    					$brandSubCatQry = "SELECT idcategory, sub FROM category WHERE idowner = '".$idbrandTree."' AND owner = 'product' AND main = '".$mainCatBrand."' AND sub IS NOT NULL AND sub != ''";
 																    				if($resultSubCatBrand = mysqli_query($conn, $brandSubCatQry)){
 																    					$subBrandTreeNum = mysqli_num_rows($resultSubCatBrand);
 																						if($subBrandTreeNum > 0){
@@ -70,15 +68,15 @@
 																												    				<a href="#"><span class="grey-text darken-4-text"><?php echo $nameListProd;?></span></a>
 																												    			</li>
 																												    		<?php
-																												    	$listProdNum++;
+																												    		$listProdNum++;
 																												    	}
 																												    }
 																												}
 																											?>
 																										</ul>
-																					    			</li>
-																					    		<?php
-																							$treeSubBrandNum++;
+																				    				</li>
+																				    			<?php
+																								$treeSubBrandNum++;
 																							}
 																						}
 																					}
@@ -104,17 +102,21 @@
     		</ul>
     	</div>
     </div>
-    <div class="col l9 s12 m12">
+    <div class="col l10 s12 m12">
     	<?php
-    	if(isset($_GET['brand'])){
-            include 'productSubCategory.php';
-    	}else{
-            include 'homeproduct.php';
-    	}
-        ?>
-    </div>
-    <div class="col s2">
-    	<div class="col s12 center">
-    	</div>
+	    	if(!isset($_GET['brand']) && !isset($_GET['mainCat']) && !isset($_GET['subCat']) && !isset($_GET['detProd'])){
+	        	include 'product-home.php';
+	    	}elseif(isset($_GET['brand']) && !isset($_GET['mainCat']) && !isset($_GET['subCat']) && !isset($_GET['detProd'])){
+	        	include 'product-main.php';
+	    	}elseif(isset($_GET['brand']) && isset($_GET['mainCat']) && !isset($_GET['subCat']) && !isset($_GET['detProd'])){
+	        	include 'product-sub.php';
+	    	}elseif(isset($_GET['brand']) && isset($_GET['mainCat']) && isset($_GET['subCat']) && !isset($_GET['detProd'])){
+	        	include 'product-list.php';
+	    	}elseif(isset($_GET['brand']) && isset($_GET['mainCat']) && isset($_GET['subCat']) && isset($_GET['detProd'])){
+	        	include 'product-detail.php';
+	    	}else{
+	        	include 'product-home.php';
+	    	}
+    	?>
     </div>
 </div>

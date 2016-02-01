@@ -9,7 +9,7 @@ require "../sql/connect.php";
 
 foreach($_POST as $key => $val) {
   if (!is_array($val)) {
-    $_POST[$key] = mysql_real_escape_string($val);
+    $_POST[$key] = mysqli_real_escape_string($conn, $val);
   }
 }
 
@@ -75,16 +75,16 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 				        <li class="bold"><a href="./index.php?menu=about&cat=contact">Contact</a></li>
 				      </ul>
 				    </div>
-				  </li> 
+				  </li>
 				</ul>
 			</li>
 			<li class="bold no-padding">
 				<ul class="collapsible" data-colapsible="accordion">
-				  <li>
-				    <a class="collapsible-header"><i width="100px" class="menu-side-icon material-icons left">collections</i>Gallery</a>
+				  <li class="active">
+				    <a class="collapsible-header active"><i width="100px" class="menu-side-icon material-icons left">collections</i>Gallery</a>
 				    <div class="collapsible-body">
 				      <ul>
-				        <li class="bold"><a href="./index.php?menu=gallery&cat=service">Service</a></li>
+				        <li class="bold active"><a href="./index.php?menu=gallery&cat=service">Service</a></li>
 				        <li class="bold"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
 				        <li class="bold"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
 				      </ul>
@@ -92,19 +92,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 				  </li> 
 				</ul>
 			</li>
-			<li class="bold no-padding">
-				<ul class="collapsible" data-colapsible="accordion">
-				  <li>
-				    <a class="collapsible-header"><i class="menu-side-icon material-icons left">toys</i>Product</a>
-				    <div class="collapsible-body">
-				      <ul>q
-				        <li class="bold"><a href="./index.php?menu=product&cat=brand">Brand</a></li>
-				        <li class="bold"><a href="./index.php?menu=product&cat=list">List Product</a></li>
-				      </ul>
-				    </div>
-				  </li> 
-				</ul>
-			</li>
+			<li class="bold"><a href="./index.php?menu=product"><i class="menu-side-icon material-icons mt-20 left">toys</i>Product</a></li>
 			<li class="bold"><a href="./index.php?menu=project"><i class="menu-side-icon material-icons mt-20 left">work</i>Project</a></li>
 			<li class="bold"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
 			<li class="bold"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>

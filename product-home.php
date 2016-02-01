@@ -1,8 +1,8 @@
 <!-- LIST OF PRODUCT -->
 <div class="row">
-	<div class="col s12">
-		<span class="grey-text darken-4-text"><a href="#"> > Brand ></a>
-	</div>
+	<div class="grey lighten-2 col s12 left pdb-30 pdt-30">
+      	<h4 class="black-text">Brand List</h4>
+    </div>
 	<?php
 		$brandQry = "SELECT * FROM brand";
 		if($resultBrandQry = mysqli_query($conn, $brandQry)){

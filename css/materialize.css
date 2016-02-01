@@ -9850,7 +9850,7 @@ select {
 
 .side-nav .collapsible-body li.active,
 .side-nav.fixed .collapsible-body li.active {
-  background-color: #ee6e73;
+  background-color: #212121;
 }
 
 .side-nav .collapsible-body li.active a,

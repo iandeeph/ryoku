@@ -5,16 +5,23 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     <div class="container">
         <div class="col s12">
             <h3 class="center">
-                PROJECT GALLERY
+                <?php
+                    if($cat == 'product'){
+                        echo "PRODUCT GALLERY";
+                    }elseif($cat == 'project'){
+                        echo "PROJECT GALLERY";
+                    }else{
+                        echo "PRODUCT GALLERY";
+                    }
+                ?>
             </h3>
         </div>
         <div class="col s12">
         <?php
         if(isset($_GET['detail'])){
-            include 'detailgallery.php';
+            include 'gallery-detail.php';
         }else{
-            include 'homegallery.php';
-            
+            include 'gallery-home.php';
         }
         ?>
         </div>

@@ -113,7 +113,7 @@
                 </div>
                 </div>
                 <div class="modal-footer mt-30s">
-                  <button name="$idImagesDetProject" id="$idImagesDetProject" class="red accent-4 white-text modal-action modal-close waves-effect waves-green btn-flat">Add</button>
+                  <button name="<?php echo $idImagesDetProject; ?>" id="<?php echo $idImagesDetProject; ?>" class="red accent-4 white-text modal-action modal-close waves-effect waves-green btn-flat">Add</button>
                   <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
                 </div>
             </div>
