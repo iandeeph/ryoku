@@ -40,14 +40,14 @@ function readURL(input) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            $('#image_upload_preview').attr('src', e.target.result);
+            $('img[id^="image_upload_preview"]').attr('src', e.target.result);
         }
 
         reader.readAsDataURL(input.files[0]);
     }
 }
 
-$("#addImageFile").change(function () {
+$("input[id^='changeImageFile']").change(function () {
     readURL(this);
 });
 
@@ -56,4 +56,27 @@ $('input[name="age"], input[name="poscode"]').change(function(){
   {
     $("input[name='submit']").removeAttr('disabled');
   }
+});
+
+$('#checkAllHomeBanner').change(function() {
+    var checkboxes = $(this).closest('form').find(':checkbox');
+    if($(this).is(':checked')) {
+        checkboxes.prop('checked', true);
+    } else {
+        checkboxes.prop('checked', false);
+    }
+});
+
+$('input:checkbox').change(function () {
+    if ($(this).is(':checked')) {
+        $('#delSelectionHomeButton, #updateSelectionHomeButton').removeClass('disabled');
+    } else if (($(this).not(':checked')) && ($("input:checkbox:checked").length <= 0)) {
+        $('#delSelectionHomeButton, #updateSelectionHomeButton').addClass('disabled');
+        $('#checkAllHomeBanner').prop('checked', false);
+    }
+});
+
+$("input[name^='titleHomeBanner'], textarea[name^='contentWordHomeBanner']").change(function () {
+    $(this).closest('tr').find(':checkbox').prop('checked', true);
+    $('#delSelectionHomeButton, #updateSelectionHomeButton').removeClass('disabled');
 });
