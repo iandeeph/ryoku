@@ -58,7 +58,7 @@ $('input[name="age"], input[name="poscode"]').change(function(){
   }
 });
 
-$('#checkAllHomeBanner').change(function() {
+$('input[id^="checkAll"]').change(function() {
     var checkboxes = $(this).closest('form').find(':checkbox');
     if($(this).is(':checked')) {
         checkboxes.prop('checked', true);
@@ -69,14 +69,14 @@ $('#checkAllHomeBanner').change(function() {
 
 $('input:checkbox').change(function () {
     if ($(this).is(':checked')) {
-        $('#delSelectionHomeButton, #updateSelectionHomeButton').removeClass('disabled');
+        $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
     } else if (($(this).not(':checked')) && ($("input:checkbox:checked").length <= 0)) {
-        $('#delSelectionHomeButton, #updateSelectionHomeButton').addClass('disabled');
-        $('#checkAllHomeBanner').prop('checked', false);
+        $('a[id^="delSelection"], button[id^="updateSelection"]').addClass('disabled');
+        $('input[id^="checkAll"]').prop('checked', false);
     }
 });
 
-$("input[name^='titleHomeBanner'], textarea[name^='contentWordHomeBanner']").change(function () {
+$("input[name^='title'], textarea[name^='contentWord']").change(function () {
     $(this).closest('tr').find(':checkbox').prop('checked', true);
-    $('#delSelectionHomeButton, #updateSelectionHomeButton').removeClass('disabled');
+    $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
 });

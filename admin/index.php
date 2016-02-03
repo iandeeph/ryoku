@@ -50,92 +50,97 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     <title>Admin Panel</title>
   </head>
   <body>
-	<header>
-		<div class="navbar-fixed">
-			<nav>
-				<div class="nav-wrapper navbar-fixed grey darken-3 valign-wrapper">
-					<a href="#" data-activates="side-menu" class="button-collapse left"><i class="menu-side-icon material-icons">menu</i></a>
-					<a href="#!" class="center brand-logo"><img src="../images/logo.png" width="110px"></a>
-					<div style="width:100%" class="hide-on-med-and-down"><h4 class="right-align mr-30">Admin Control Panel</h4></div>
-				</div>
-			</nav>
-		</div>
-		<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px; height:90%">
-			<li class="bold"><a href="./index.php?menu=banner"><i class="menu-side-icon material-icons mt-20 left">home</i>Home Banner</a></li>
-			<li class="bold no-padding">
-				<ul class="collapsible" data-colapsible="accordion">
-				  <li>
-				    <a class="collapsible-header"><i class="menu-side-icon material-icons left">business</i>About</a>
-				    <div class="collapsible-body">
-				      <ul>
-				        <li class="bold"><a href="./index.php?menu=about&cat=company">Company Profile</a></li>
-				        <li class="bold"><a href="./index.php?menu=about&cat=service">Service</a></li>
-				        <li class="bold"><a href="./index.php?menu=about&cat=client">Client</a></li>
-				        <li class="bold"><a href="./index.php?menu=about&cat=social">Social</a></li>
-				        <li class="bold"><a href="./index.php?menu=about&cat=contact">Contact</a></li>
-				      </ul>
-				    </div>
-				  </li>
-				</ul>
-			</li>
-			<li class="bold no-padding">
-				<ul class="collapsible" data-colapsible="accordion">
-				  <li class="active">
-				    <a class="collapsible-header active"><i width="100px" class="menu-side-icon material-icons left">collections</i>Gallery</a>
-				    <div class="collapsible-body">
-				      <ul>
-				        <li class="bold active"><a href="./index.php?menu=gallery&cat=service">Service</a></li>
-				        <li class="bold"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
-				        <li class="bold"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
-				      </ul>
-				    </div>
-				  </li> 
-				</ul>
-			</li>
-			<li class="bold"><a href="./index.php?menu=product"><i class="menu-side-icon material-icons mt-20 left">toys</i>Product</a></li>
-			<li class="bold"><a href="./index.php?menu=project"><i class="menu-side-icon material-icons mt-20 left">work</i>Project</a></li>
-			<li class="bold"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
-			<li class="bold"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>
-		</ul>
-	</header>
+		<header>
+			<div class="navbar-fixed">
+				<nav>
+					<div class="nav-wrapper navbar-fixed grey darken-3 valign-wrapper">
+						<a href="#" data-activates="side-menu" class="button-collapse left"><i class="menu-side-icon material-icons">menu</i></a>
+						<a href="#!" class="center brand-logo"><img src="../images/logo.png" width="110px"></a>
+						<div style="width:100%" class="hide-on-med-and-down"><h4 class="right-align mr-30">Admin Control Panel</h4></div>
+					</div>
+				</nav>
+			</div>
+		  	<?php
+		  		if(isset($_SESSION['login']) && $_SESSION['login'] == 'logged'){
+		  			$firstName = $_SESSION['firstName'];
+		  			$lastName = $_SESSION['lastName'];
+		  			?>
+						<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px; height:90%">
+							<li class="bold" disabled>Hi, <?php echo $firstName." ".$lastName;?></li>
+							<li class="divider"></li>
+							<li class="bold <?php echo ($menu == 'banner')? "active" : "";?>"><a href="./index.php?menu=banner"><i class="menu-side-icon material-icons mt-20 left">home</i>Home Banner</a></li>
+							<li class="bold no-padding" <?php echo ($menu == 'home')? "active" : "";?>>
+								<ul class="collapsible" data-colapsible="accordion">
+								  <li class=" <?php echo ($menu == 'about')? "active" : "";?>">
+								    <a class="collapsible-header <?php echo ($menu == 'about')? "active" : "";?>"><i class="menu-side-icon material-icons left">business</i>About</a>
+								    <div class="collapsible-body">
+								      <ul>
+								        <li class="bold <?php echo ($menu == 'about' && $cat == 'company')? "active" : "";?>"><a href="./index.php?menu=about&cat=company">Company Profile</a></li>
+								        <li class="bold <?php echo ($menu == 'about' && $cat == 'service')? "active" : "";?>"><a href="./index.php?menu=about&cat=service">Service</a></li>
+								        <li class="bold <?php echo ($menu == 'about' && $cat == 'client')? "active" : "";?>"><a href="./index.php?menu=about&cat=client">Client</a></li>
+								        <li class="bold <?php echo ($menu == 'about' && $cat == 'social')? "active" : "";?>"><a href="./index.php?menu=about&cat=social">Social</a></li>
+								        <li class="bold <?php echo ($menu == 'about' && $cat == 'contact')? "active" : "";?>"><a href="./index.php?menu=about&cat=contact">Contact</a></li>
+								      </ul>
+								    </div>
+								  </li>
+								</ul>
+							</li>
+							<li class="bold <?php echo ($menu == 'product')? "active" : "";?>"><a href="./index.php?menu=product"><i class="menu-side-icon material-icons mt-20 left">toys</i>Product</a></li>
+							<li class="bold <?php echo ($menu == 'project')? "active" : "";?>"><a href="./index.php?menu=project"><i class="menu-side-icon material-icons mt-20 left">work</i>Project</a></li>
+							<li class="bold <?php echo ($menu == 'user')? "active" : "";?>"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
+							<li class="bold <?php echo ($menu == 'visitor')? "active" : "";?>"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>
+							<li class="divider"></li>
+							<li class="bold"><a href="./index.php?menu=logout"><i class="menu-side-icon material-icons mt-20 left">exit_to_app</i>Logout</a></li>
+						</ul>
+					<?php
+				}else{
+			    	include 'login.php';
+			    }
+			?>
+		</header>
     <main>
     	<div class="menu-admin">
-	    <?php
-	        switch ($menu) {
-	          case 'banner':
-	            include 'home.php';
-	            break;
+		    <?php
+		  		if(isset($_SESSION['login']) && $_SESSION['login'] == 'logged'){
+			        switch ($menu) {
+			          case 'banner':
+			            include 'home.php';
+			            break;
 
-	          case 'about':
-	            include 'about.php';
-	            break;
-	          
-	          case 'gallery':
-	            include 'gallery.php';
-	            break;
+			          case 'about':
+			            include 'about.php';
+			            break;
+			          
+			          case 'gallery':
+			            include 'gallery.php';
+			            break;
 
-	          case 'product':
-	            include 'product.php';
-	            break;
+			          case 'product':
+			            include 'product.php';
+			            break;
 
-	          case 'project':
-	            include 'project.php';
-	            break;
+			          case 'project':
+			            include 'project.php';
+			            break;
 
-	          case 'user':
-	            include 'user.php';
-	            break;
+			          case 'user':
+			            include 'user.php';
+			            break;
 
-	          case 'visitor':
-	            include 'visitor.php';
-	            break;
+			          case 'visitor':
+			            include 'visitor.php';
+			            break;
 
-	          default:
-	            include 'login.php';
-	            break;
-	        }
-	    ?>
-    	</div>
+			          case 'logout':
+			            include 'logout.php';
+			            break;
+
+			          default:
+			            include 'home.php';
+			            break;
+			        }
+			    }
+		    ?>
     	</div>
     </main>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>

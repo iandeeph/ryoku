@@ -168,25 +168,24 @@
 													</div>
 												</td>
 											</tr>
-
 											<!-- ======================== MODAL =========================================================== -->
 											<div id="<?php echo "uploadModal".$idimages; ?>" class="modal">
 												<div class="modal-content">
 													<div class="border-bottom mb-10"><h4>Change Image</h4></div>
 													<div class="col s12 mb-30 mt-30 center container">
 														<div class="file-field input-field col s12">
-															<img id="<?php echo "image_upload_preview".$idimages; ?>" max-width="500px" src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img" title="klick to change image">
+															<img id="<?php echo "image_upload_preview".$idimages; ?>" max-width="500px" src="<?php echo "../".$pathImagesBanner; ?>" class="responsive-img">
 															<div class="file-field input-field col s12">
 																<div class="btn green darken-4">
 																	<span>Change</span>
-																	<input id="<?php echo "changeImageFile".$idimages; ?>" name="<?php echo "changeImagesFile".$idimages; ?>" type="file">
+																	<input id="<?php echo "changeImagesFile".$idimages; ?>" name="<?php echo "changeImagesFile".$idimages; ?>" type="file">
 																</div>
 																<div class="file-path-wrapper">
-																	<input id="<?php echo "changeImagesPath".$idimages; ?>" name="<?php echo "changeIMagesPath".$idimages; ?>" class="file-path validate" type="text">
+																	<input id="<?php echo "changeIMagesPath".$idimages; ?>" name="<?php echo "changeIMagesPath".$idimages; ?>" class="file-path validate" type="text">
 																</div>
 															</div>
 															<div class="col s12">
-																<button type="submit" id="<?php echo "btnChangeImages".$idimages; ?>" name="btnChangeImages" class="waves-effect waves-light btn blue darken-4 right"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
+																<button type="submit" id="<?php echo "btnChangeImages".$idimages; ?>" name="<?php echo "btnChangeImages".$idimages; ?>" class="waves-effect waves-light btn blue darken-4 right"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
 															</div>
 														</div>
 													</div>
@@ -196,9 +195,10 @@
 										<?php
 										$btnChangeImages = "btnChangeImages".$idimages;
 										$changeImagesFile = "changeImagesFile".$idimages;
+										$changeIMagesPath = "changeIMagesPath".$idimages;
 										if(isset($_POST[$btnChangeImages])){
 											$uploadOk = 1;
-											if(isset($_POST[$btnChangeImages])){
+											if(isset($_POST[$changeIMagesPath]) && $_POST[$changeIMagesPath] != ''){
 												$target_dir = "../images/";
 												$target_file = $target_dir . basename($_FILES[$changeImagesFile]["name"]);
 												$filePath = "images/" . basename($_FILES[$changeImagesFile]["name"]);
@@ -228,12 +228,22 @@
 												// if everything is ok, try to upload file
 												} else {
 												    if (move_uploaded_file($_FILES[$changeImagesFile]["tmp_name"], $target_file)) {
+
+												    	$delPrevImagesBanner = "SELECT path FROM images WHERE owner = 'banner' AND idimages = '".$idimages."'";
+												    	if($resultDeleteBanner = mysqli_query($conn, $delPrevImagesBanner)){
+															if(mysqli_num_rows($resultDeleteBanner) > 0){
+																$rowDeleteBanner = mysqli_fetch_array($resultDeleteBanner);
+																$pathImagesBanner = $rowDeleteBanner['path'];
+																unlink("../".$pathImagesBanner);
+															}
+														}
+
 														$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE idimages = '".$idimages."'";
 														if(mysqli_query($conn, $updateChangeImagesFile)){
 
 															$postMessages = "Images Updated";
 													        $colorMessages = "green-text";
-					        								header('Location: ./index.php?menu=banner');
+													        header('Location: ./index.php?menu=banner');
 													    }else{
 													    	$postMessages = "ERROR: Could not able to execute ".$updateChangeImagesFile.". " . mysqli_error($conn);
 												        	$colorMessages = "red-text";

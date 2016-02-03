@@ -15,6 +15,7 @@ foreach($_POST as $key => $val) {
 
 $menu = isset($_GET['menu'])?$_GET['menu']:'';
 $brand = isset($_GET['brand'])?$_GET['brand']:'';
+$cat = isset($_GET['cat'])?$_GET['cat']:'';
 
 $companyQry = "SELECT * FROM company LIMIT 1";
 if($resultCompanyQry = mysqli_query($conn, $companyQry)){
@@ -121,30 +122,29 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
                     <li><a href="./index.php?menu=gallery&cat=product">Product</a></li>
                   </ul>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a class="menu-btn" href="./index.php?menu=home">Home</a></li>
-                    <li><a class="menu-btn" href="./index.php?menu=about">About</a></li>
-                    <li><a class="menu-btn" href="./index.php?menu=product">Product</a></li>
-                    <li><a class="menu-btn" href="./index.php?menu=project">Project</a></li>
-                    <li><a class="menu-btn dropdown-button" href="#!" data-activates="galleryDropDown">Gallery<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
-                    <li><a class="menu-btn" href="./index.php?menu=contact">Contact</a></li>
+                    <li class="<?php echo ($menu == 'home')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=home">Home</a></li>
+                    <li class="<?php echo ($menu == 'about')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=about">About</a></li>
+                    <li class="<?php echo ($menu == 'product')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=product">Product</a></li>
+                    <li class="<?php echo ($menu == 'project')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=project">Project</a></li>
+                    <li class="<?php echo ($menu == 'gallery')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="galleryDropDown">Gallery<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
+                    <li class="<?php echo ($menu == 'contact')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=contact">Contact</a></li>
                   </ul>
                 </div>
               </div>
             </div>
             <ul class="side-nav" id="mobile-demo">
-              <li class="bold"><a href="./index.php?menu=home">Home</a></li>
-              <li class="bold"><a href="./index.php?menu=about">About</a></li>
-              <li class="bold"><a href="./index.php?menu=product">Product</a></li>
-              <li class="bold"><a href="./index.php?menu=project">Project</a></li>
-              <li class="bold no-padding">
+              <li class="bold <?php echo ($menu == 'home')? "active" : "";?>"><a href="./index.php?menu=home">Home</a></li>
+              <li class="bold <?php echo ($menu == 'about')? "active" : "";?>"><a href="./index.php?menu=about">About</a></li>
+              <li class="bold <?php echo ($menu == 'product')? "active" : "";?>"><a href="./index.php?menu=product">Product</a></li>
+              <li class="bold <?php echo ($menu == 'project')? "active" : "";?>"><a href="./index.php?menu=project">Project</a></li>
+              <li class="bold no-padding <?php echo ($menu == 'gallery')? "active" : "";?>">
                 <ul class="collapsible" data-colapsible="accordion">
-                  <li>
-                    <a class="collapsible-header">Gallery</a>
+                  <li class="<?php echo ($menu == 'gallery')? "active" : "";?>">
+                    <a class="collapsible-header <?php echo ($menu == 'gallery')? "active" : "";?>">Gallery</a>
                     <div class="collapsible-body">
                       <ul>
-                        <li class="bold"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
-                        <li class="bold"><a href="./index.php?menu=gallery&cat=service">Service</a></li>
-                        <li class="bold"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
+                        <li class="bold <?php echo ($menu == 'gallery' && $cat == 'project')? "active" : "";?>"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
+                        <li class="bold <?php echo ($menu == 'gallery' && $cat == 'product')? "active" : "";?>"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
                       </ul>
                     </div>
                   </li> 
