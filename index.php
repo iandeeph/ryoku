@@ -9,7 +9,7 @@ require "sql/connect.php";
 
 foreach($_POST as $key => $val) {
   if (!is_array($val)) {
-    $_POST[$key] = mysql_real_escape_string($val);
+    $_POST[$key] = mysqli_real_escape_string($conn, $val);
   }
 }
 

@@ -114,6 +114,23 @@ nav{
   padding-top:10px;        
 }
 
+.pdl-10{
+  padding-left:10px;
+}
+
+.pdr-10{
+  padding-right:10px;        
+}
+
+.pdl-20{
+  padding-left:20px;
+}
+
+.pdr-20{
+  padding-right:20px;        
+}
+
+
 .img-center{
   display: block;
   margin-left: auto;

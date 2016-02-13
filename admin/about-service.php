@@ -2,8 +2,8 @@
 	$postMessages = "";
 	$colorMessages = "";
 	if(isset($_POST['btnAddNewAboutService']) && isset($_POST['addImagesPathAboutService']) && $_POST['addImagesPathAboutService'] != ''){
-		$postTitleAboutService = mysqli_real_escape_string($conn, $_POST['addAboutServiceTitle']);
-		$postContentWordAboutService = mysqli_real_escape_string($conn, $_POST['addAboutServiceContentWord']);
+		$postTitleAboutService = $_POST['addAboutServiceTitle'];
+		$postContentWordAboutService = $_POST['addAboutServiceContentWord'];
 		$uploadOk = 1;
 		$target_dir = "../images/";
 		$target_file = $target_dir . basename($_FILES["addImageFileAboutService"]["name"]);

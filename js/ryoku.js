@@ -1,5 +1,22 @@
 $(".button-collapse").sideNav();
 $(".button-hide").sideNav();
+
+function checkPasswordMatch() {
+    var password = $("#addUserPassword").val();
+    var confirmPassword = $("#addUserReenterPassword").val();
+
+    if (password != confirmPassword){
+        $("#txtConfirmPassword").text("Passwords do not match!");
+        $("#txtConfirmPassword").addClass('red-text');
+        $("#txtConfirmPassword").removeClass('green-text');
+        
+    }else{
+        $("#txtConfirmPassword").text("Passwords match.");
+        $("#txtConfirmPassword").addClass('green-text');
+        $("#txtConfirmPassword").removeClass('red-text');
+    }
+}
+
 $(document).ready(function() {
     $("#owl-demo").owlCarousel({
         items : 4,
@@ -15,6 +32,10 @@ $(document).ready(function() {
 
     $(".dropdown-button").dropdown();$('.collapsible').collapsible({
         accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+
+    $(document).ready(function () {
+        $("#addUserReenterPassword").keyup(checkPasswordMatch);
     });
 
     $('.materialboxed').materialbox();
@@ -51,13 +72,6 @@ $("input[id^='changeImageFile']").change(function () {
     readURL(this);
 });
 
-$('input[name="age"], input[name="poscode"]').change(function(){
-  if ($(this).val())
-  {
-    $("input[name='submit']").removeAttr('disabled');
-  }
-});
-
 $('input[id^="checkAll"]').change(function() {
     var checkboxes = $(this).closest('form').find(':checkbox');
     if($(this).is(':checked')) {
@@ -79,4 +93,14 @@ $('input:checkbox').change(function () {
 $("input[name^='title'], textarea[name^='contentWord']").change(function () {
     $(this).closest('tr').find(':checkbox').prop('checked', true);
     $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+});
+
+$("input[name^='title'], input[name^='linkAboutSocial']").change(function () {
+    $(this).closest('tr').find(':checkbox').prop('checked', true);
+    $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+});
+
+$("#changeImagePathAboutContact, #nameCompany, #phoneCompany, #faxCompany, #addressCompany").change(function () {
+    $('#btnUpdateAboutContact').removeClass('disabled');
+    $('#btnUpdateAboutContact').prop("disabled", false);
 });

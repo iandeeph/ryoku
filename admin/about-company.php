@@ -2,7 +2,7 @@
 	$postMessages = "";
 	$colorMessages = "";
 	if(isset($_POST['btnUpdateAboutCompany'])){
-		if(isset($_POST['changeAboutCompanyPath'])){
+		if(isset($_POST['changeAboutCompanyFile'])){
 			$uploadOk = 1;
 			$target_dir = "../images/";
 			$target_file = $target_dir . basename($_FILES["changeAboutCompanyFile"]["name"]);
@@ -56,7 +56,7 @@
 	    }
 	    
 		if(isset($_POST['changeAboutCompanyTextarea'])){
-			$postContentWordAbout = mysqli_real_escape_string($conn, $_POST['changeAboutCompanyTextarea']);
+			$postContentWordAbout = $_POST['changeAboutCompanyTextarea'];
 			$updateAboutProfile = "UPDATE profile SET aboutWord = '".$postContentWordAbout."'";
 			if(mysqli_query($conn, $updateAboutProfile)){
 				$postMessages = "Profile Updated";

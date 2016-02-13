@@ -12,8 +12,8 @@
         $catSubASC = "ORDER BY category.sub ASC";
         $catSubDESC = "ORDER BY category.sub DESC";
 
-        $sortProdList = isset($sortProdList)?$sortProdList:'';
-        $sort = isset($sort)?$sort:'';
+        $sortProdList = isset($_GET['sortProdList'])?$_GET['sortProdList']:'';
+        $sort = isset($_GET['sort'])?$_GET['sort']:'';
 
         if($menu == 'product' && $sortProdList == 'product' && $sort == 'asc'){
             $orderSortListQy = $prodNameASC;
@@ -93,7 +93,7 @@
             <a href="#addProductModal" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add more images"><i class="material-icons">add</i></a>
         </div>
         <div class="col s12">
-            <a class="waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
+            <a id="delSelectionProduct" href="#modalDelProductItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
         </div>
         <div class="col s12">
             <form action="#" method="post" enctype="multipart/form-data">
@@ -161,10 +161,10 @@
                                         ?>
                                             <tr>
                                                 <td>
-                                                    <p>
-                                                        <input type="checkbox" id="checkAll" name="<?php echo $idProduct; ?>"/>
-                                                        <label for="checkAll"></label>
-                                                    </p>
+                                            <p>
+                                                <input name="checkboxUser[]" type="checkbox" id="<?php echo $idProduct; ?>" value="<?php echo $idProduct; ?>" />
+                                                <label for="<?php echo $idProduct; ?>"></label>
+                                            </p>
                                                 </td>
                                                 <td>
                                                     <?php echo $nameProdList; ?>
@@ -194,6 +194,16 @@
                         ?>
                     </tbody>
                 </table>
+                <div id="modalDelProductItems" class="modal">
+                    <div class="modal-content">
+                        <h4>Deleting Confirmation</h4>
+                        <h5>Are you sure want to delete selected item(s) ?</h5>
+                    </div>
+                    <div class="modal-footer col s12 mb-50">
+                        <button type="submit" name="btnDeleteProduct" class="waves-effect waves-light btn green darken-4 right">Yes</button>
+                        <a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
+                    </div>
+                </div>
                 <div id="addProductModal" class="modal">
                     <div class="modal-content">
                         <div class="col s12">
