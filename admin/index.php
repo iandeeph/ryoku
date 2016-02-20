@@ -68,16 +68,14 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 						<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px; height:90%">
 							<li class="bold" disabled>Hi, <?php echo $firstName." ".$lastName;?></li>
 							<li class="divider"></li>
-							<li class="bold <?php echo ($menu == 'banner')? "active" : "";?>"><a href="./index.php?menu=banner"><i class="menu-side-icon material-icons mt-20 left">home</i>Home Banner</a></li>
 							<li class="bold no-padding" <?php echo ($menu == 'home')? "active" : "";?>>
 								<ul class="collapsible" data-colapsible="accordion">
 								  <li class=" <?php echo ($menu == 'about')? "active" : "";?>">
-								    <a class="collapsible-header <?php echo ($menu == 'about')? "active" : "";?>"><i class="menu-side-icon material-icons left">business</i>About</a>
+								    <a class="collapsible-header <?php echo ($menu == 'about')? "active" : "";?>"><i class="menu-side-icon material-icons left">home</i>About</a>
 								    <div class="collapsible-body">
 								      <ul>
 								        <li class="bold <?php echo ($menu == 'about' && $cat == 'company')? "active" : "";?>"><a href="./index.php?menu=about&cat=company">Company Profile</a></li>
 								        <li class="bold <?php echo ($menu == 'about' && $cat == 'service')? "active" : "";?>"><a href="./index.php?menu=about&cat=service">Service</a></li>
-								        <li class="bold <?php echo ($menu == 'about' && $cat == 'client')? "active" : "";?>"><a href="./index.php?menu=about&cat=client">Client</a></li>
 								        <li class="bold <?php echo ($menu == 'about' && $cat == 'social')? "active" : "";?>"><a href="./index.php?menu=about&cat=social">Social</a></li>
 								        <li class="bold <?php echo ($menu == 'about' && $cat == 'contact')? "active" : "";?>"><a href="./index.php?menu=about&cat=contact">Contact</a></li>
 								      </ul>
@@ -85,8 +83,32 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 								  </li>
 								</ul>
 							</li>
-							<li class="bold <?php echo ($menu == 'product')? "active" : "";?>"><a href="./index.php?menu=product"><i class="menu-side-icon material-icons mt-20 left">toys</i>Product</a></li>
-							<li class="bold <?php echo ($menu == 'project')? "active" : "";?>"><a href="./index.php?menu=project"><i class="menu-side-icon material-icons mt-20 left">work</i>Project</a></li>
+							<li class="bold no-padding" <?php echo ($menu == 'product')? "active" : "";?>>
+								<ul class="collapsible" data-colapsible="accordion">
+								  <li class=" <?php echo ($menu == 'product')? "active" : "";?>">
+								    <a class="collapsible-header <?php echo ($menu == 'product')? "active" : "";?>"><i class="menu-side-icon material-icons left">toys</i>Product</a>
+								    <div class="collapsible-body">
+								      <ul>
+								        <li class="bold <?php echo ($menu == 'product' && $cat == 'list')? "active" : "";?>"><a href="./index.php?menu=product&cat=list">Product List</a></li>
+								        <li class="bold <?php echo ($menu == 'product' && $cat == 'brand')? "active" : "";?>"><a href="./index.php?menu=product&cat=brand">Brand</a></li>
+								      </ul>
+								    </div>
+								  </li>
+								</ul>
+							</li>
+							<li class="bold no-padding" <?php echo ($menu == 'project')? "active" : "";?>>
+								<ul class="collapsible" data-colapsible="accordion">
+								  <li class=" <?php echo ($menu == 'project')? "active" : "";?>">
+								    <a class="collapsible-header <?php echo ($menu == 'project')? "active" : "";?>"><i class="menu-side-icon material-icons left">work</i>Project</a>
+								    <div class="collapsible-body">
+								      <ul>
+								        <li class="bold <?php echo ($menu == 'project' && $cat == 'list')? "active" : "";?>"><a href="./index.php?menu=project&cat=list">Project List</a></li>
+								        <li class="bold <?php echo ($menu == 'project' && $cat == 'client')? "active" : "";?>"><a href="./index.php?menu=project&cat=client">Client</a></li>
+								      </ul>
+								    </div>
+								  </li>
+								</ul>
+							</li>
 							<li class="bold <?php echo ($menu == 'user')? "active" : "";?>"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
 							<li class="bold <?php echo ($menu == 'visitor')? "active" : "";?>"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>
 							<li class="divider"></li>
@@ -103,10 +125,6 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 		    <?php
 		  		if(isset($_SESSION['login']) && $_SESSION['login'] == 'logged'){
 			        switch ($menu) {
-			          case 'banner':
-			            include 'home.php';
-			            break;
-
 			          case 'about':
 			            include 'about.php';
 			            break;
@@ -136,7 +154,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 			            break;
 
 			          default:
-			            include 'home.php';
+			            include 'about.php';
 			            break;
 			        }
 			    }
@@ -150,5 +168,6 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     <script src="../js/jquery.swipebox.min.js"></script>
     <script type="text/javascript" src="../js/collapsibleLists.min.js"></script>
     <script type="text/javascript" src="../js/ryoku.js"></script>
+    <script type="text/javascript" src="../js/jssor.slider.debug.js"></script>
   </body>
 </html>

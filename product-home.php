@@ -4,23 +4,12 @@
       	<h4 class="black-text">Brand List</h4>
     </div>
 	<?php
-		$brandQry = "SELECT * FROM brand";
+		$brandQry = "SELECT * FROM brand ORDER BY name ASC";
 		if($resultBrandQry = mysqli_query($conn, $brandQry)){
 			if(mysqli_num_rows($resultBrandQry) > 0){
 				while ($rowBrandtQry = mysqli_fetch_array($resultBrandQry)) {
 					$idbrand 	= $rowBrandtQry['idbrand'];
 					$nameBrand	= $rowBrandtQry['name'];
-					$idCatBrand	= $rowBrandtQry['idcategory'];
-
-					$categoryBrandQry = "SELECT * FROM category WHERE idcategory = '".$idCatBrand."' AND owner = 'Brand' LIMIT 1";
-					if($resultCatBrandQry = mysqli_query($conn, $categoryBrandQry)){
-						if(mysqli_num_rows($resultCatBrandQry) > 0){
-							$rowCatBrandQry = mysqli_fetch_array($resultCatBrandQry);
-							$idcategoryBrand	= $rowCatBrandQry['idcategory'];
-							$mainCatBrand 		= $rowCatBrandQry['main'];
-							$subCatBrand 		= $rowCatBrandQry['sub'];
-						}
-					}
 
 					$imagesBrandQry = "SELECT * FROM images WHERE owner = 'brand' AND idowner = '".$idbrand."' LIMIT 1";
 					if($resultImagesBrandQry = mysqli_query($conn, $imagesBrandQry)){
@@ -33,9 +22,9 @@
 					}
 					?>
 						<div class="col s12 m6 l3 mt-30">
-							<div class="col s12">
+							<div class="col s12 center" style="height:300px">
 								<a href="./index.php?menu=product&brand=<?php echo $idbrand;?>">
-									<img src="<?php echo $pathBrand;?>" alt="<?php echo $nameImagesBrand;?>" title="<?php echo $nameBrand;?>" class="responsive-img">
+									<img src="<?php echo $pathBrand;?>" alt="<?php echo $nameImagesBrand;?>" title="<?php echo $nameBrand;?>" class="responsive-img" width="250px">
 								</a>
 							</div>
 							<div class="col s12 center">

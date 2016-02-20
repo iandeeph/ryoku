@@ -3,29 +3,30 @@
   <div class="s12">
     <div id="owl-demo" class="owl-carousel" style="opacity: 1; display: block;">
       <?php
-      if($resultBannerQry = mysqli_query($conn, "SELECT * FROM banner ORDER BY idbanner DESC")){
+      $bannerQry = "SELECT idproduct, contentWord, name FROM product ORDER BY RAND() LIMIT 10";
+      if($resultBannerQry = mysqli_query($conn, $bannerQry)){
         if (mysqli_num_rows($resultBannerQry) > 0) {
           while ($rowBanner = mysqli_fetch_array($resultBannerQry)) {
-            $idbanner = $rowBanner['idbanner'];
-            $contentWord = $rowBanner['contentWord'];
+            $idproduct          = $rowBanner['idproduct'];
+            $nameProductBanner  = $rowBanner['name'];
+            $contentWordProduct = substr($rowBanner['contentWord'], 0, 100);
 
-            $imagesBannerQry = "SELECT * FROM images WHERE (owner = 'banner' AND idowner = '".$idbanner."') LIMIT 1";
+            $imagesBannerQry = "SELECT path FROM images WHERE (owner = 'product' AND idowner = '".$idproduct."') ORDER BY RAND() LIMIT 1";
             
             if ($resultImagesBannerQry = mysqli_query($conn, $imagesBannerQry)) {
               $rowImagesBanner = mysqli_fetch_array($resultImagesBannerQry);
-              $titleImagesBanner  = $rowImagesBanner['title'];
               $pathImagesBanner   = $rowImagesBanner['path'];
             }
             ?>
-            <div class="item">
-              <img class="lazyOwl" data-src="<?php echo $pathImagesBanner;?>" alt="Images Banner" style="display: inline;">
-              <a href="<?php echo $pathImagesBanner;?>" class="swipebox" title="<?php echo $titleImagesBanner;?>">
-                <div class="pdt-0 portfolio_head hide-on-med-and-down">
-                  <h3><?php echo $titleImagesBanner;?></h3>
-                  <p><?php echo $contentWord;?></p>
-                </div>
-              </a>
-            </div>
+              <div class="item" style="height:250px">
+                <img class="lazyOwl" data-src="<?php echo $pathImagesBanner;?>" alt="Images Banner" style="display: inline;">
+                <a href="<?php echo $pathImagesBanner;?>" class="swipebox" title="<?php echo $nameProductBanner;?>">
+                  <div class="pdt-0 portfolio_head hide-on-med-and-down">
+                    <h3><?php echo $nameProductBanner;?></h3>
+                    <p><?php echo $contentWordProduct."...";?></p>
+                  </div>
+                </a>
+              </div>
             <?php
           }
         }else {
@@ -42,6 +43,7 @@
 <div class="row">
   <div class="col s12">
     <div class="container">
+      <div class="divider"></div>
       <div class="col s12 center">
         <h3 class="grey-text">SERVICE</h3>
       </div>
@@ -86,56 +88,51 @@
 <div class="row">
   <div class="col s12 project">
     <div class="container">
-      <div class="col s12 center border-bottom">
+      <div class="col s12 center">
         <h3 class="white-text">LATEST PROJECT</h3>
       </div>
-      <div class="col s12 left border-bottom">              
-        <div class="col s12 left">
-          <a href="#">
-            <h5 class="white-text">PERAKITAN PIPA BAWAH LAUT</h5>
-          </a>
-        </div>
-        <div class="col s12 center">
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic1.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic2.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic.jpg">
-          </div>
-        </div>
-        <div class="col s12 left">
-          <a class="waves-effect waves-light btn mb-30 mt-30 blue darken-3">Detail</a>
-        </div>
-      </div>
-      <div class="col s12 left border-bottom">              
-        <div class="col s12 left">
-          <a href="#">
-            <h5 class="white-text">PERAKITAN POMPA AIR BERSIH</h5>
-          </a>
-        </div>
-        <div class="col s12 left">
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic1.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30">
-            <img class="materialboxed responsive-img" src="images/pic2.jpg">
-          </div>
-          <div class="col s12 m6 l3 center mt-30"> 
-            <img class="materialboxed responsive-img" src="images/pic.jpg">
-          </div>
-        </div>
-        <div class="col s12 left">
-          <a class="waves-effect waves-light btn mb-30 mt-30 blue darken-3">Detail</a>
-        </div>
+      <div class="col s12 section">              
+        <?php
+          $latesProjectQry = "SELECT idproject, name, contentWord FROM project ORDER BY date ASC LIMIT 3";
+          if ($resultLatestProj = mysqli_query($conn, $latesProjectQry)) {
+            if (mysqli_num_rows($resultLatestProj) > 0) {
+              while($rowLatestProj  = mysqli_fetch_array($resultLatestProj)){
+                $idLatestProj   = $rowLatestProj['idproject'];
+                $nameLatestProj = $rowLatestProj['name'];
+                $contentWordLatestProj = $rowLatestProj['contentWord'];
+                ?>
+                  <div class="col s12 left border-bottom">
+                    <a href="#">
+                      <h5 class="white-text"><?php echo strtoupper($nameLatestProj); ?></h5>
+                    </a>
+                  </div>
+                  <div class="col s12 center border-bottom">
+                    <?php
+                      $imagesLatesProjQry = "SELECT path FROM images WHERE (owner = 'project' AND idowner = '".$idLatestProj."') LIMIT 4";
+                      if ($resultImagesLatestProj = mysqli_query($conn, $imagesLatesProjQry)) {
+                        if (mysqli_num_rows($resultImagesLatestProj) > 0) {
+                          while($rowImagesLatestProj  = mysqli_fetch_array($resultImagesLatestProj)){
+                            $pathImagesLatestProj  = $rowImagesLatestProj['path'];
+                            ?>
+                              <div class="col s12 m6 l3 center mt-30 mb-30">
+                                <img class="materialboxed responsive-img" src="<?php echo $pathImagesLatestProj; ?>">
+                              </div>
+                            <?php
+                          }
+                        }
+                      }
+                    ?>
+                  </div>
+                  <div class="col s12 left">
+                    <p class="left">
+                        <?php echo substr($contentWordLatestProj, 0, 250)."<a href='./index.php?menu=project#".$idLatestProj."'> [... Read More]</a>";?>
+                      </p>
+                  </div>
+                <?php
+              }
+            }
+          }
+        ?>
       </div>
     </div>
   </div>

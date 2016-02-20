@@ -30,19 +30,34 @@ $(document).ready(function() {
         $(".swipebox").swipebox();
     });
 
+    $("#btnAddMainProdCatList").click(function(){
+        var mainCatValue = $("#addMainProdCatList").val();
+        $("#selectMainCatWrapper").remove();
+        $("#mainCatWrapper").append('<div id="inputMainCatWrapper" class="input-field"><input id="mainCatAddInput" name="mainCatAdd" type="text" class="validate"><label id="mainCatLabel" for="mainCatAddInput">Main Category</label></div>');
+        $("#mainCatAddInput").val(mainCatValue);
+        $("#mainCatLabel").addClass('active');
+    });
+
+    $("#btnAddSubProdCatList").click(function(){
+        var subCatValue = $("#addSubProdCatList").val();
+        $("#selectSubCatWrapper").remove();
+        $("#subCatWrapper").append('<div id="inputSubCatWrapper" class="input-field"><input id="subCatAddInput" name="subCatAdd" type="text" class="validate"><label id="subCatLabel" for="subCatAddInput">Sub Category</label></div>');
+        $("#subCatAddInput").val(subCatValue);
+        $("#subCatLabel").addClass('active');
+    });
+
     $(".dropdown-button").dropdown();$('.collapsible').collapsible({
         accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
     });
 
-    $(document).ready(function () {
-        $("#addUserReenterPassword").keyup(checkPasswordMatch);
-    });
+    $("#addUserReenterPassword").keyup(checkPasswordMatch);
 
     $('.materialboxed').materialbox();
     $('.scrollspy').scrollSpy();
     $('.modal-trigger').leanModal();
     $('.slider').slider({full_width: false});
     $('select').material_select();
+    $('.carousel').carousel();
 });
 
 CollapsibleLists.apply();
@@ -53,7 +68,8 @@ tinymce.init({
 
 $('.datepicker').pickadate({
       selectMonths: true, // Creates a dropdown to control month
-      selectYears: 15 // Creates a dropdown of 15 years to control year
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+      dateFormat: 'yyyy-mm-dd'
 });
 
 function readURL(input) {
@@ -73,7 +89,7 @@ $("input[id^='changeImageFile']").change(function () {
 });
 
 $('input[id^="checkAll"]').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox');
+    var checkboxes = $(this).closest('form').find(':checkbox').not(':disabled');
     if($(this).is(':checked')) {
         checkboxes.prop('checked', true);
     } else {
@@ -93,6 +109,12 @@ $('input:checkbox').change(function () {
 $("input[name^='title'], textarea[name^='contentWord']").change(function () {
     $(this).closest('tr').find(':checkbox').prop('checked', true);
     $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+});
+
+
+$("input[id^='titleProductBrand']").change(function () {
+    $(this).closest('tr').find(':checkbox').prop('checked', true);
+    $('button[id^="updateSelection"]').removeClass('disabled');
 });
 
 $("input[name^='title'], input[name^='linkAboutSocial']").change(function () {

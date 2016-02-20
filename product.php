@@ -9,7 +9,7 @@
     				<span class="grey-text darken-4-text">List of Product</span>
 		    		<ul class="collapsibleList">
 		    			<?php
-		    				$brandTreeQry = "SELECT * FROM brand";
+		    				$brandTreeQry = "SELECT * FROM brand ORDER BY name ASC";
 							if($resultBrandTree = mysqli_query($conn, $brandTreeQry)){
 								$brandTreeNum = mysqli_num_rows($resultBrandTree);
 								if($brandTreeNum > 0){
@@ -17,7 +17,6 @@
 									while ($rowBrandTree = mysqli_fetch_array($resultBrandTree)) {
 										$idbrandTree 	= $rowBrandTree['idbrand'];
 										$nameBrandTree	= $rowBrandTree['name'];
-										$idCatBrandTree	= $rowBrandTree['idcategory'];
 
 										$lastChild = ($brandTreeNum == $treeBrandNum) ? "lastChild" : "";
 										?>
@@ -25,13 +24,13 @@
 							    				<a href="#"><span class="grey-text darken-4-text"><?php echo $nameBrandTree;?></span></a>
 							    				<ul>
 								    				<?php
-									    				$brandCatQry = "SELECT main FROM category WHERE idowner = '".$idbrandTree."' AND owner = 'product' GROUP BY main";
+									    				$brandCatQry = "SELECT mainCategory FROM product WHERE idbrand = '".$idbrandTree."' GROUP BY mainCategory";
 									    				if($resultMainCatBrand = mysqli_query($conn, $brandCatQry)){
 									    					$mainBrandTreeNum = mysqli_num_rows($resultMainCatBrand);
 															if($mainBrandTreeNum > 0){
 																$treemainBrandNum = 1;
 																while($rowmainCatBrandQry = mysqli_fetch_array($resultMainCatBrand)){
-																	$mainCatBrand = $rowmainCatBrandQry['main'];
+																	$mainCatBrand = $rowmainCatBrandQry['mainCategory'];
 																	
 																	$lastChildMain = ($mainBrandTreeNum == $treemainBrandNum) ? "lastChild" : "";
 																	?>
@@ -39,14 +38,13 @@
 														    				<a href="#"><span class="grey-text darken-4-text"><?php echo $mainCatBrand;?></span></a>
 														    				<ul>
 															    				<?php
-															    					$brandSubCatQry = "SELECT idcategory, sub FROM category WHERE idowner = '".$idbrandTree."' AND owner = 'product' AND main = '".$mainCatBrand."' AND sub IS NOT NULL AND sub != ''";
+															    					$brandSubCatQry = "SELECT subCategory FROM product WHERE mainCategory = '".$mainCatBrand."' AND idbrand = '".$idbrandTree."' AND subCategory IS NOT NULL AND subCategory != ''";
 																    				if($resultSubCatBrand = mysqli_query($conn, $brandSubCatQry)){
 																    					$subBrandTreeNum = mysqli_num_rows($resultSubCatBrand);
 																						if($subBrandTreeNum > 0){
 																							$treeSubBrandNum = 1;
 																							while($rowSubCatBrandQry = mysqli_fetch_array($resultSubCatBrand)){
-																								$idSubCatBrand 	= $rowSubCatBrandQry['idcategory'];
-																								$subCatBrand 	= $rowSubCatBrandQry['sub'];
+																								$subCatBrand 	= $rowSubCatBrandQry['subCategory'];
 																								
 																								$lastChildSub = ($subBrandTreeNum == $treeSubBrandNum) ? "lastChild" : "";
 																								?>
@@ -54,18 +52,19 @@
 																					    				<a href="#"><span class="grey-text darken-4-text"><?php echo $subCatBrand;?></span></a>
 														    											<ul>
 														    												<?php
-																						    					$listProdQry = "SELECT name FROM product WHERE idbrand = '".$idbrandTree."' AND idcategory = '".$idSubCatBrand."'";
+																						    					$listProdQry = "SELECT idproduct, name FROM product WHERE idbrand = '".$idbrandTree."' AND subCategory = '".$subCatBrand."' ORDER BY name ASC";
 																							    				if($resultListProd = mysqli_query($conn, $listProdQry)){
 																							    					$listProdTreeNum = mysqli_num_rows($resultListProd);
 																													if($listProdTreeNum > 0){
 																														$listProdNum = 1;
 																														while($rowListProd = mysqli_fetch_array($resultListProd)){
+																															$idListProd = $rowListProd['idproduct'];
 																															$nameListProd = $rowListProd['name'];
 																															
 																															$lastChildProd = ($listProdTreeNum == $listProdNum) ? "lastChild" : "";
 																															?>
 																																<li class="<?php echo $lastChildProd;?>">
-																												    				<a href="#"><span class="grey-text darken-4-text"><?php echo $nameListProd;?></span></a>
+																												    				<a href="./index.php?menu=product&brand=<?php echo $idbrandTree;?>&mainCat=<?php echo $mainCatBrand;?>&subCat=<?php echo $subCatBrand;?>&detProd=<?php echo $idListProd;?>"><span class="grey-text darken-4-text"><?php echo $nameListProd;?></span></a>
 																												    			</li>
 																												    		<?php
 																												    		$listProdNum++;

@@ -30,10 +30,6 @@
             include 'about-service.php';
             break;
           
-          case 'client':
-            include 'about-client.php';
-            break;
-
           case 'social':
             include 'about-social.php';
             break;

@@ -130,7 +130,6 @@ nav{
   padding-right:20px;        
 }
 
-
 .img-center{
   display: block;
   margin-left: auto;
@@ -313,3 +312,21 @@ li.collapsibleListClosed{
 .menu-side-icon{
   width : 30px;
 }
+
+/*====== JSSOR SLIDER*/
+.jssorb13 {
+    position: absolute;
+}
+.jssorb13 div, .jssorb13 div:hover, .jssorb13 .av {
+    position: absolute;
+    /* size of bullet elment */
+    width: 21px;
+    height: 21px;
+    background: url('../images/b13.png') no-repeat;
+    overflow: hidden;
+    cursor: pointer;
+}
+.jssorb13 div { background-position: -5px -5px; }
+.jssorb13 div:hover, .jssorb13 .av:hover { background-position: -35px -5px; }
+.jssorb13 .av { background-position: -65px -5px; }
+.jssorb13 .dn, .jssorb13 .dn:hover { background-position: -95px -5px; }

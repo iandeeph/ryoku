@@ -16,14 +16,14 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
                 ?>
             </h3>
         </div>
-        <div class="col s12">
-        <?php
-        if(isset($_GET['detail'])){
-            include 'gallery-detail.php';
-        }else{
-            include 'gallery-home.php';
-        }
-        ?>
+        <div class="col s12 center">
+            <?php
+                if(isset($_GET['detail'])){
+                    include 'gallery-detail.php';
+                }else{
+                    include 'gallery-home.php';
+                }
+            ?>
         </div>
     </div>
 </div>

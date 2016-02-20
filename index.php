@@ -121,11 +121,15 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
                     <li><a href="./index.php?menu=gallery&cat=project">Project</a></li>
                     <li><a href="./index.php?menu=gallery&cat=product">Product</a></li>
                   </ul>
+                  <ul id="projectDropDown" class="dropdown-content mt-50">
+                    <li><a href="./index.php?menu=project&cat=experience">Experience</a></li>
+                    <li><a href="./index.php?menu=project&cat=list">Detail</a></li>
+                  </ul>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li class="<?php echo ($menu == 'home')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=home">Home</a></li>
                     <li class="<?php echo ($menu == 'about')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=about">About</a></li>
                     <li class="<?php echo ($menu == 'product')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=product">Product</a></li>
-                    <li class="<?php echo ($menu == 'project')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=project">Project</a></li>
+                    <li class="<?php echo ($menu == 'project')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="projectDropDown">Project<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
                     <li class="<?php echo ($menu == 'gallery')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="galleryDropDown">Gallery<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
                     <li class="<?php echo ($menu == 'contact')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=contact">Contact</a></li>
                   </ul>
@@ -201,7 +205,7 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
         <div class="col s12">
           <div class="container">
             <div class="col s12 center">
-              <h3 class="black-text">GET IN TOUCH</h3>
+              <h3 class="black-text">KEEP IN TOUCH</h3>
             </div>
             <div class="col s12 center">
               <p class="grey-text darken-5-text">
@@ -292,5 +296,6 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
     <script src="js/jquery.swipebox.min.js"></script>
     <script type="text/javascript" src="js/collapsibleLists.min.js"></script>
     <script type="text/javascript" src="js/ryoku.js"></script>
+    <script type="text/javascript" src="js/jssor.slider.debug.js"></script>
   </body>
 </html>

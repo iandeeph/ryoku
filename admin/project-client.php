@@ -1,6 +1,6 @@
 <?php
-	$postMessages = "";
-	$colorMessages = "";
+	$postMessages = isset($postMessages)?$postMessages:'';
+	$colorMessages = isset($colorMessages)?$colorMessages:'';
 	if(isset($_POST['btnAddNewAboutClient']) && isset($_POST['addImagesPathAboutClient']) && $_POST['addImagesPathAboutClient'] != ''){
 		$postTitleAboutClient = mysqli_real_escape_string($conn, $_POST['addAboutClientTitle']);
 		$uploadOk = 1;
@@ -42,7 +42,7 @@
 
 						$postMessages = "New client added";
 				        $colorMessages = "green-text";
-				        header('Location: ./index.php?menu=about&cat=client');
+				        header('Location: ./index.php?menu=project&cat=client');
 				    }else{
 				    	$postMessages = "ERROR: Could not able to execute ".$insertAddImages.". " . mysqli_error($conn);
 			        	$colorMessages = "red-text";
@@ -72,7 +72,6 @@
 			}
 		}
 	}
-
 // ============================== BUTTON DELETE CLICK ==========================================================
 
 // ============================== BUTTON UPDATE CLICK ==========================================================
