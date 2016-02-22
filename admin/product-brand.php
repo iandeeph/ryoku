@@ -114,8 +114,14 @@
 <div class="col s12">
 	<form action="#" method="post" enctype="multipart/form-data">
 		<div class="col s12">
-            <a id="delSelectionBrand" href="#modalDelBrand" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
-			<button id="updateSelectionProductBrandButton" name="updateSelectionProductBrandButton" class="waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
+			<?php
+				if($_SESSION['privilege'] == '1'){
+					?>
+            			<a id="delSelectionBrand" href="#modalDelBrand" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+            		<?php
+            	}
+            ?>
+			<button id="updateSelectionProductBrandButton" name="updateSelectionProductBrandButton" class="waves-effect waves-light btn blue darken-4 disabled" disabled><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
             <a href="#addBrand" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right" title="Add more images"><i class="material-icons">add</i></a>
 		</div>
 		<div class="col s12">
@@ -124,21 +130,21 @@
 		<table class="highlight">
 			<thead>
 				<tr>
-					<td width="50px">
+					<th width="50px">
 						<p>
 							<input type="checkbox" id="checkAll" />
 							<label for="checkAll"></label>
 						</p>
-					</td>
-					<td width="250px">
+					</th>
+					<th width="250px">
 						Images
-					</td>
-					<td width="800px">
+					</th>
+					<th width="800px">
 						Name
-					</td>
-					<td class="center" width="250px">
+					</th>
+					<th class="center" width="250px">
 						Total Product
-					</td>
+					</th>
 				</tr>
 			</thead>
 			<tbody>

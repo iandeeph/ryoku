@@ -140,7 +140,13 @@
             <h3 class="left-align">Product List</h3>
         </div>
         <div class="col s12">
-            <a id="delSelectionProduct" href="#modalDelProductItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled mt-30"><i class="material-icons left">delete</i>Delete</a>
+            <?php
+                if($_SESSION['privilege'] == '1'){
+                    ?>
+                        <a id="delSelectionProduct" href="#modalDelProductItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled mt-30" disabled><i class="material-icons left">delete</i>Delete</a>
+                    <?php
+                }
+            ?>
             <a href="#addProductModal" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add more images"><i class="material-icons">add</i></a>
         </div>
         <div class="col s12">

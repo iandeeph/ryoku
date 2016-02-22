@@ -100,26 +100,28 @@ $('input[id^="checkAll"]').change(function() {
 $('input:checkbox').change(function () {
     if ($(this).is(':checked')) {
         $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+        $('a[id^="delSelection"]').addClass('modal-trigger');
+        $('a[id^="delSelection"], button[id^="updateSelection"]').prop("disabled", false);
     } else if (($(this).not(':checked')) && ($("input:checkbox:checked").length <= 0)) {
         $('a[id^="delSelection"], button[id^="updateSelection"]').addClass('disabled');
+        $('a[id^="delSelection"]').removeClass('modal-trigger');
+        $('a[id^="delSelection"], button[id^="updateSelection"]').prop("disabled", true);
         $('input[id^="checkAll"]').prop('checked', false);
     }
 });
 
-$("input[name^='title'], textarea[name^='contentWord']").change(function () {
-    $(this).closest('tr').find(':checkbox').prop('checked', true);
-    $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
-});
-
-
-$("input[id^='titleProductBrand']").change(function () {
+$("input[name^='title'], textarea[name^='contentWord'], input[name^='linkAboutSocial']").change(function () {
     $(this).closest('tr').find(':checkbox').prop('checked', true);
     $('button[id^="updateSelection"]').removeClass('disabled');
-});
-
-$("input[name^='title'], input[name^='linkAboutSocial']").change(function () {
-    $(this).closest('tr').find(':checkbox').prop('checked', true);
-    $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+    $('button[id^="updateSelection"]').prop("disabled", false);
+    if ($(this).closest('tr').find(':checkbox').is(":disabled")) {
+        $('a[id^="delSelection"]').addClass('disabled');
+        $('a[id^="delSelection"]').removeClass('modal-trigger');
+        $(this).closest('tr').find(':checkbox').prop('disabled', false);
+    } else{
+        $('a[id^="delSelection"]').removeClass('disabled');
+        $('a[id^="delSelection"]').addClass('modal-trigger');
+    }
 });
 
 $("#changeImagePathAboutContact, #nameCompany, #phoneCompany, #faxCompany, #addressCompany").change(function () {

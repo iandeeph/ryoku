@@ -99,8 +99,14 @@
 <div class="col s12">
 	<form action="#" method="post" enctype="multipart/form-data">
 		<div class="col s12">
-			<a id="delSelectionAboutClientButton" href="#modalDelAboutClientItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
-			<button id="updateSelectionAboutClientButton" name="updateSelectionAboutClientButton" class="waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
+			<?php
+				if($_SESSION['privilege'] == '1'){
+					?>
+						<a id="delSelectionAboutClientButton" href="#modalDelAboutClientItems" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+					<?php
+				}
+			?>
+			<button id="updateSelectionAboutClientButton" name="updateSelectionAboutClientButton" class="waves-effect waves-light btn blue darken-4 disabled" disabled><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
 			<a href="#modalAddAboutClientItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
 		</div>
 		<div class="col s12">
@@ -109,18 +115,21 @@
 		<table class="highlight">
 			<thead>
 				<tr>
-					<td width="50px">
+					<th width="50px">
 						<p>
 							<input type="checkbox" id="checkAll" />
 							<label for="checkAll"></label>
 						</p>
-					</td>
-					<td width="250px">
+					</th>
+					<th width="250px">
 						Images
-					</td>
-					<td width="800px">
+					</th>
+					<th width="800px">
 						Name
-					</td>
+					</th>
+					<th class="center" width="250px">
+						Total Product
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -138,11 +147,19 @@
 										$rowImagesClientQry = mysqli_fetch_array($resultImagesClientQry);
 										$idimagesClient	= $rowImagesClientQry['idimages'];
 										$pathClient 	= $rowImagesClientQry['path'];
+
+										$countProjClientQry = "SELECT count(idclient) as countProject FROM project WHERE idclient = '".$idclient."'";
+										if($resultCountProj = mysqli_query($conn, $countProjClientQry)){
+											if(mysqli_num_rows($resultCountProj) > 0){
+												$rowCountProj = mysqli_fetch_array($resultCountProj);
+												$projectCount = $rowCountProj['countProject'];
+											}
+										}
 										?>
 										<tr>
 											<td>
 												<p>
-													<input name="checkboxAboutClient[]" type="checkbox" id="<?php echo "checkboxAboutClient".$idimagesClient; ?>" value="<?php echo $idclient; ?>"/>
+													<input name="checkboxAboutClient[]" type="checkbox" id="<?php echo "checkboxAboutClient".$idimagesClient; ?>" value="<?php echo $idclient; ?>" <?php echo ($projectCount > 0)? "disabled" : "";?>/>
 													<label for="<?php echo "checkboxAboutClient".$idimagesClient; ?>"></label>
 												</p>
 											</td>
@@ -153,6 +170,9 @@
 												<div class="input-field">
 													<input id="<?php echo "titleAboutClient".$idclient; ?>" name="<?php echo "titleAboutClient".$idclient; ?>" class="validate" value="<?php echo $nameClient; ?>">
 												</div>
+											</td>
+											<td class="center">
+												<?php echo $projectCount; ?>
 											</td>
 										</tr>
 										<!-- ======================== MODAL =========================================================== -->

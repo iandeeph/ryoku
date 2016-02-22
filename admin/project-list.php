@@ -140,7 +140,13 @@
             <h3 class="left-align">Project List</h3>
         </div>
         <div class="col s12">
-            <a id="delSelectionProject" href="#modalDelProjectItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled mt-30"><i class="material-icons left">delete</i>Delete</a>
+            <?php
+                if($_SESSION['privilege'] == '1'){
+                    ?>
+                        <a id="delSelectionProject" href="#modalDelProjectItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled mt-30" disabled><i class="material-icons left">delete</i>Delete</a>
+                    <?php
+                }
+            ?>
             <a href="#addProjectModal" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add more images"><i class="material-icons">add</i></a>
         </div>
         <div class="col s12">
@@ -192,8 +198,8 @@
                                     while($rowProjList = mysqli_fetch_array($resultProjList)){
                                         $idProject          = $rowProjList['idproject'];
                                         $nameProjList       = $rowProjList['name'];
-                                        $nameClientProjList  = $rowProjList['location'];
-                                        $dateProjList    = $rowProjList['date'];
+                                        $nameClientProjList = $rowProjList['location'];
+                                        $dateProjList       = date("j F, Y", strtotime($rowProjList['date']));
                                         $clientNameList     = $rowProjList['clientName'];
 
                                         $totImagesProjList = "SELECT count(*) as totalImagesProjList FROM images WHERE owner = 'project' AND idowner = '".$idProject."'";

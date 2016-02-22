@@ -109,7 +109,13 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 								  </li>
 								</ul>
 							</li>
-							<li class="bold <?php echo ($menu == 'user')? "active" : "";?>"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
+							<?php
+								if($_SESSION['privilege'] == '1'){
+									?>
+										<li class="bold <?php echo ($menu == 'user')? "active" : "";?>"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
+									<?php
+								}
+							?>
 							<li class="bold <?php echo ($menu == 'visitor')? "active" : "";?>"><a href="./index.php?menu=visitor"><i class="menu-side-icon material-icons mt-20 left">contact_mail</i>Visitor</a></li>
 							<li class="divider"></li>
 							<li class="bold"><a href="./index.php?menu=logout"><i class="menu-side-icon material-icons mt-20 left">exit_to_app</i>Logout</a></li>

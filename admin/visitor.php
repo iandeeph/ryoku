@@ -22,9 +22,15 @@
 	</div>
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
-			<div class="col s12 mb-30">
-				<a id="delSelectionVisitorButton" href="#modalDelVisitorItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
-			</div>
+			<?php
+				if($_SESSION['privilege'] == '1'){
+					?>
+						<div class="col s12 mb-30">
+							<a id="delSelectionVisitorButton" href="#modalDelVisitorItems" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+						</div>
+					<?php
+				}
+			?>
 			<table class="highlight responsive-table">
 				<thead>
 					<tr>

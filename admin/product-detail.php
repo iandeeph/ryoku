@@ -184,9 +184,15 @@ $detail = isset($_GET['detail'])?$_GET['detail']:'';
 		<h5 class="col s12 m6 l6">Manage Image</h5>
 		<a href="#modalAddProductDetailItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add more images"><i class="material-icons">add</i></a>
 	</div>
-	<div class="col s12 red-text">
-		*klick images for delete
-	</div>
+	<?php
+        if($_SESSION['privilege'] == '1'){
+            ?>
+				<div class="col s12 red-text">
+					*klick images for delete
+				</div>
+			<?php
+		}
+	?>
 	<div class="col s12 mt-30 border-bottom">
 		<?php
 		$imagesDetProductQry = "SELECT idimages, path FROM images WHERE (owner = 'Product' AND idowner = '".$idDetProd."')";
@@ -198,8 +204,8 @@ $detail = isset($_GET['detail'])?$_GET['detail']:'';
 					?>
 						<form action="#" method="post" enctype="multipart/form-data">
 							<div style="height: 300px;" class="col l2 m4 s12">
-								<a href="<?php echo "#modalProject".$idImagesDetProduct; ?>" class="modal-trigger">
-									<img src="<?php echo "../".$pathImagesDetProduct; ?>" class="responsive-img ml-10 mr-10" title="klick to delete image">
+								<a href="<?php echo ($_SESSION['privilege'] == '1')? "#modalProject".$idImagesDetProduct : "" ?>" class="<?php echo ($_SESSION['privilege'] == '1')? "modal-trigger" : "" ?>">
+									<img src="<?php echo "../".$pathImagesDetProduct; ?>" class="responsive-img ml-10 mr-10" title="<?php echo ($_SESSION['privilege'] == '1')? "Click to delete image" : "" ?>">
 								</a>
 							</div>
 							<!-- =========================================== modal =========================== -->

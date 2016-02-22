@@ -65,7 +65,7 @@
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
 			<div class="col s12 mb-30">
-				<a id="delSelectionUserButton" href="#modalDelUserItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
+				<a id="delSelectionUserButton" href="#modalDelUserItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
 				<a href="#modalAddUserItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
 			</div>
 			<table class="responsive-table col s12">

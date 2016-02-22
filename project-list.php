@@ -2,7 +2,7 @@
 	<div class="col hide-on-med-and-down l2 pinned">
 		<ul class="section table-of-contents">
 			<?php
-				$titleProjectQry = "SELECT idproject, name FROM project";
+				$titleProjectQry = "SELECT idproject, name FROM project ORDER BY date DESC";
 				if($resultTitleProject = mysqli_query($conn, $titleProjectQry)){
 					if(mysqli_num_rows($resultTitleProject) > 0){
 						while($rowResultTitleProject = mysqli_fetch_array($resultTitleProject)){
@@ -21,14 +21,14 @@
 	<div class="col s12 m12 l11 offset-l1">
 		<div class="container">
 			<?php
-				$projectQry = "SELECT * FROM project";
+				$projectQry = "SELECT * FROM project ORDER BY date DESC";
 				if($resultProject = mysqli_query($conn, $projectQry)){
 					if(mysqli_num_rows($resultProject) > 0){
 						while($rowResultProject = mysqli_fetch_array($resultProject)){
 							$idproject 			= $rowResultProject['idproject'];
 							$nameProject 		= $rowResultProject['name'];
 							$locationProject 	= $rowResultProject['location'];
-							$dateProject 		= $rowResultProject['date'];
+							$dateProject 		= date('j F, Y', strtotime($rowResultProject['date']));
 							$contentProject 	= $rowResultProject['contentWord'];
 							?>
 							<div id="<?php echo $idproject; ?>" class="section scrollspy mb-30">

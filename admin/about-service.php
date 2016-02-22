@@ -102,8 +102,14 @@
 <div class="col s12">
 	<form action="#" method="post" enctype="multipart/form-data">
 		<div class="col s12">
-			<a id="delSelectionAboutServiceButton" href="#modalDelAboutServiceItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled"><i class="material-icons left">delete</i>Delete</a>
-			<button id="updateSelectionAboutServiceButton" name="updateSelectionAboutServiceButton" class="waves-effect waves-light btn blue darken-4 disabled"><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
+			<?php
+				if($_SESSION['privilege'] == '1'){
+					?>
+						<a id="delSelectionAboutServiceButton" href="#modalDelAboutServiceItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+					<?php
+				}
+			?>
+			<button id="updateSelectionAboutServiceButton" name="updateSelectionAboutServiceButton" class="waves-effect waves-light btn blue darken-4 disabled" disabled><i class="material-icons left">subdirectory_arrow_left</i>Update</button>
 			<a href="#modalAddAboutServiceItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
 		</div>
 		<div class="col s12">
