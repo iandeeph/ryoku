@@ -8,16 +8,40 @@ main {
   flex: 1 0 auto;
 }
 
-nav .nav-wrapper {
-  height: 100px;
+@media only screen and (max-width: 992px) {
+  nav .nav-wrapper {
+    height: 75px;
+  }
+
+  nav{
+    height: 75px;
+  }
+
+  .navbar-fixed{
+    height: 75px;
+  }
+
+  .admin-logo{
+    width: 85px;
+  }
 }
 
-nav{
-  height: 100px;
-}
+@media only screen and (min-width: 993px) {
+  nav .nav-wrapper {
+    height: 100px;
+  }
 
-.navbar-fixed{
-  height: 100px;
+  nav{
+    height: 100px;
+  }
+
+  .navbar-fixed{
+    height: 100px;
+  }
+
+  .admin-logo{
+    width: 110px;
+  }
 }
 
 .nav-mobile-side > li > a{
@@ -78,6 +102,10 @@ nav{
   margin-left: 30px;
 }
 
+.ml-240{
+  margin-left: 240px;
+}
+
 .mr-30{
   margin-right: 30px;        
 }
@@ -116,6 +144,10 @@ nav{
 
 .pdl-10{
   padding-left:10px;
+}
+
+.pdl-240{
+  padding-left:240px;
 }
 
 .pdr-10{
@@ -276,7 +308,7 @@ li.collapsibleListClosed{
 }
 
 .side-nav{
-  top : 100px;
+  top : 0px;
 }
 
 @media only screen and (min-width: 993px) {
@@ -330,3 +362,81 @@ li.collapsibleListClosed{
 .jssorb13 div:hover, .jssorb13 .av:hover { background-position: -35px -5px; }
 .jssorb13 .av { background-position: -65px -5px; }
 .jssorb13 .dn, .jssorb13 .dn:hover { background-position: -95px -5px; }
+
+.brand-images-wrapper{
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.height-300{
+  height:300px;
+}
+
+.brand-name-wrapper{
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.gallery-images-wrapper{
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.gallery-name-wrapper{
+  height:50px;
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.brand-desc-wrapper{
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+.bold{
+  font-weight: bold;
+}
+.italic{
+  font-style: italic;
+}
+
+.bordered{
+  border:solid 2px #0d47a1;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.welcome-page{
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#9e9e9e+0,d1d1d1+9,ffffff+100 */
+  background: #9e9e9e; /* Old browsers */
+  background: -moz-linear-gradient(top,  #9e9e9e 0%, #d1d1d1 9%, #ffffff 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #9e9e9e 0%,#d1d1d1 9%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #9e9e9e 0%,#d1d1d1 9%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  height : 100%;
+}
+
+.full-height{
+  height : 100%;
+}
+
+.height-100{
+  height : 100px;
+}
+
+.height-500{
+  height : 500px;
+}

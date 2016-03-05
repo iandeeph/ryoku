@@ -11,8 +11,11 @@
 
 		$addNewUserQry = "INSERT INTO user (username, password, firstName, lastName, email, privilege) 
 						VALUES ('".$postUsername."', '".$postPassword."', '".$postFirstName."', '".$postLastName."', '".$postEmail."', '".$postPrivilege."')";
+		$permission = ($postPrivilege == '1')?"Administrator":"Operator";
 
 		if(mysqli_query($conn, $addNewUserQry)){
+			$LastIdUser = mysqli_insert_id($conn);
+			logging($now, $user, "Add New User", "Username : ".$postUsername."<br>Name : ".$postFirstName." ".$postLastName."<br>Permission : ".$permission, $LastIdUser);
 	        // header('Location: ./index.php?menu=user');
 	    }else{
 	    	$postMessages = "ERROR: Could not able to execute ".$addNewUserQry.". " . mysqli_error($conn);
@@ -24,7 +27,25 @@
 		foreach ($_POST['checkboxUser'] as $selectedIdUser) {
 			$delUserQry = "DELETE FROM user WHERE iduser = '".$selectedIdUser."'";
 
+			// =============================================== LOGING
+			$nameDelUserQry = "";
+            $nameDelUserQry = "SELECT iduser, username, firstName, lastName, privilege FROM user WHERE iduser = '".$selectedIdUser."'";
+            if($resultDelUserQry = mysqli_query($conn, $nameDelUserQry)){
+                if (mysqli_num_rows($resultDelUserQry) > 0) {
+                    while($rowDelUsers = mysqli_fetch_array($resultDelUserQry)){
+                        $idDelUsers    		= $rowDelUsers['iduser'];
+                        $usernameDelUsers  	= $rowDelUsers['username'];
+                        $firstNameDelUsers  = $rowDelUsers['firstName'];
+                        $lastNameDelUsers  	= $rowDelUsers['lastName'];
+                        $privilegeDelUsers  = $rowDelUsers['privilege'];
+
+                        $permission = ($privilegeDelUsers == '1')?"Administrator":"Operator";
+                    }
+                }
+            }
+			// =============================================== LOGING
 			if (mysqli_query($conn, $delUserQry)) {
+				logging($now, $user, "Delete User", "Username : ".$usernameDelUsers."<br>Name : ".$firstNameDelUsers." ".$lastNameDelUsers."<br>Permission : ".$permission, $idDelUsers);
 			    $postMessages =  "Record deleted successfully";
 				$colorMessages = "green-text";
 			} else {
@@ -32,27 +53,6 @@
 	        	$colorMessages = "red-text";
 			}
 		}
-	}
-
-// ============================== BUTTON UPDATE CLICK ==========================================================
-	if(isset($_POST['updateUserButton'])){
-		$postUpdateIdUser 	= $_POST['iduser'];
-		$postUpdateUsername 	= $_POST['UserUsername'];
-		$postUpdatePassword 	= $_POST['UserPassword'];
-		$postUpdateFirstName 	= $_POST['UserFirstName'];
-		$postUpdateLastName 	= $_POST['UserLastName'];
-		$postUpdateEmail 		= $_POST['UserEmail'];
-		$postUpdatePrivilege 	= $_POST['UserPermission'];
-
-		$updateUserQry = "UPDATE user SET username = '".$postUpdateUsername."', password = '".$postUpdatePassword."', firstName = '".$postUpdateFirstName."', lastName = '".$postUpdateLastName."', email = '".$postUpdateEmail."', privilege = '".$postUpdatePrivilege."' 
-						WHERE iduser = '".$postUpdateIdUser."'";
-
-		if(mysqli_query($conn, $updateUserQry)){
-	        header('Location: ./index.php?menu=user');
-	    }else{
-	    	$postMessages = "ERROR: Could not able to execute ".$updateUserQry.". " . mysqli_error($conn);
-        	$colorMessages = "red-text";
-	    }
 	}
 ?>
 <div class="row">
@@ -65,10 +65,10 @@
 	<div class="col s12">
 		<form action="#" method="post" enctype="multipart/form-data">
 			<div class="col s12 mb-30">
-				<a id="delSelectionUserButton" href="#modalDelUserItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+				<a id="delSelectionUserButton" href="#modalDelUserItems" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
 				<a href="#modalAddUserItems" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right"><i class="material-icons">add</i></a>
 			</div>
-			<table class="responsive-table col s12">
+			<table class="stripped responsive-table col s12">
 				<thead>
 					<tr>
 						<th data-field="id">
@@ -132,27 +132,27 @@
 												<div class="border-bottom mb-10"><h4>Edit User</h4></div>
 												<div class="col s12 mt-30 center container">
 													<div class="file-field input-field col s12 m6 l6">
-														<input value="<?php echo $username; ?>" id="UserUsername" name="UserUsername" type="text" class="validate" required>
-														<label for="UserUsername">Username</label>
+														<input value="<?php echo $username; ?>" id="<?php echo "UserUsername".$iduser; ?>" name="<?php echo "UserUsername".$iduser; ?>" type="text" class="validate" required>
+														<label for="<?php echo "UserUsername".$iduser; ?>">Username</label>
 													</div>
 													<div class="file-field input-field col s12 m6 l6">
-														<input value="<?php echo $passwordUser; ?>" id="UserPassword" name="UserPassword" type="text" class="validate" required>
-														<label for="UserPassword">Password</label>
+														<input value="<?php echo $passwordUser; ?>" id="<?php echo "UserPassword".$iduser; ?>" name="<?php echo "UserPassword".$iduser; ?>" type="text" class="validate" required>
+														<label for="<?php echo "UserPassword".$iduser; ?>">Password</label>
 													</div>
 													<div class="file-field input-field col s12 m6 l6">
-														<input value="<?php echo $firstNameUser; ?>" id="UserFirstName" name="UserFirstName" type="text" class="validate" required>
-														<label for="UserFirstName">First Name</label>
+														<input value="<?php echo $firstNameUser; ?>" id="<?php echo "UserFirstName".$iduser; ?>" name="<?php echo "UserFirstName".$iduser; ?>" type="text" class="validate" required>
+														<label for="<?php echo "UserFirstName".$iduser; ?>">First Name</label>
 													</div>
 													<div class="file-field input-field col s12 m6 l6">
-														<input value="<?php echo $lastNameUser; ?>" id="UserLastName" name="UserLastName" type="text" class="validate" required>
-														<label for="UserLastName">Last Name</label>
+														<input value="<?php echo $lastNameUser; ?>" id="<?php echo "UserLastName".$iduser; ?>" name="<?php echo "UserLastName".$iduser; ?>" type="text" class="validate" required>
+														<label for="<?php echo "UserLastName".$iduser; ?>">Last Name</label>
 													</div>
 													<div class="file-field input-field col s12 m6 l6">
-														<input value="<?php echo $email; ?>" id="UserEmail" name="UserEmail" type="email" class="validate" required>
-														<label for="UserEmail">Email</label>
+														<input value="<?php echo $email; ?>" id="<?php echo "UserEmail".$iduser; ?>" name="<?php echo "UserEmail".$iduser; ?>" type="email" class="validate" required>
+														<label for="<?php echo "UserEmail".$iduser; ?>">Email</label>
 													</div>
 													<div class="input-field col s12 m6 l6">
-														<select id="UserPermission" name="UserPermission">
+														<select id="<?php echo "UserPermission".$iduser; ?>" name="<?php echo "UserPermission".$iduser; ?>">
 															<option value="" disabled>Choose your option</option>
 															<option <?php echo ($privilege == 1) ? "selected":""; ?> value="1">Administrator</option>
 															<option <?php echo ($privilege == 2) ? "selected":""; ?> value="2">Operator</option>
@@ -160,14 +160,55 @@
 														<label>Permission</label>
 													</div>
 													<div class="input-field col s12 mb-50">
-														<input value="<?php echo $iduser; ?>" name="iduser" type="hidden">
-														<button type="submit" name="updateUserButton" class="waves-effect waves-light btn green darken-4 right">Update</button>
+														<input value="<?php echo $iduser; ?>" name="<?php echo "hiddeniduser".$iduser; ?>" type="hidden">
+														<button type="submit" name="<?php echo "updateUserButton".$iduser; ?>" class="waves-effect waves-light btn green darken-4 right">Update</button>
 													</div>
 												</div>
 											</div>
 										</div>
 									</tr>
 									<?php
+									// ============================== BUTTON UPDATE CLICK ==========================================================
+									$btnUpdateIdUser	= "updateUserButton".$iduser;
+									$hiddeniduser 		= "hiddeniduser".$iduser;
+									$UserUsername 		= "UserUsername".$iduser;
+									$UserPassword 		= "UserPassword".$iduser;
+									$UserFirstName 		= "UserFirstName".$iduser;
+									$UserLastName 		= "UserLastName".$iduser;
+									$UserEmail 			= "UserEmail".$iduser;
+									$UserPermission 	= "UserPermission".$iduser;
+									if(isset($_POST[$btnUpdateIdUser])){
+										$postUpdateIdUser 		= $_POST[$hiddeniduser];
+										$postUpdateUsername 	= $_POST[$UserUsername];
+										$postUpdatePassword 	= $_POST[$UserPassword];
+										$postUpdateFirstName 	= $_POST[$UserFirstName];
+										$postUpdateLastName 	= $_POST[$UserLastName];
+										$postUpdateEmail 		= $_POST[$UserEmail];
+										$postUpdatePrivilege 	= $_POST[$UserPermission];
+
+										$updateUserQry = "UPDATE user SET username = '".$postUpdateUsername."', password = '".$postUpdatePassword."', firstName = '".$postUpdateFirstName."', lastName = '".$postUpdateLastName."', email = '".$postUpdateEmail."', privilege = '".$postUpdatePrivilege."' 
+														WHERE iduser = '".$postUpdateIdUser."'";
+										// ================================== LOGGING
+											$updateLogUserQry = "";
+											$updateLogUserQry = "SELECT username, firstName, lastName FROM user WHERE iduser = '".$postUpdateIdUser."' LIMIT 1";
+											if($resultUpdateUserQry = mysqli_query($conn, $updateLogUserQry)){
+												if (mysqli_num_rows($resultUpdateUserQry) > 0) {
+													$rowUpdateUser = mysqli_fetch_array($resultUpdateUserQry);
+													$usernameUpdateUser		= $rowUpdateUser['username'];
+													$firstNameUpdateUser    = $rowUpdateUser['firstName'];
+													$lastNameUpdateUser     = $rowUpdateUser['lastName'];
+												}
+											}
+											$logingContentText = "Old Username : ".$usernameUpdateUser."<br>Old First Name : ".$firstNameUpdateUser."<br>Old Last Name : ".$lastNameUpdateUser."<br>New Username : ".$postUpdateUsername."<br>New First Name : ".$postUpdateFirstName."<br>New Last Name : ".$postUpdateLastName;
+										// ================================== LOGGING
+										if(mysqli_query($conn, $updateUserQry)){
+											logging($now, $user, "Update User", $logingContentText, $postUpdateIdUser);
+									        header('Location: ./index.php?menu=user');
+									    }else{
+									    	$postMessages = "ERROR: Could not able to execute ".$updateUserQry.". " . mysqli_error($conn);
+								        	$colorMessages = "red-text";
+									    }
+									}
 								}
 							}
 						}
@@ -179,7 +220,7 @@
 					<h4>Deleting Confirmation</h4>
 					<h5>Are you sure want to delete selected item(s) ?</h5>
 				</div>
-				<div class="modal-footer col s12 mb-50">
+				<div class="modal-footer col s12 mb-30">
 					<button type="submit" name="btnDeleteUser" class="waves-effect waves-light btn green darken-4 right">Yes</button>
 					<a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
 				</div>

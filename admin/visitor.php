@@ -4,9 +4,27 @@
 	// ============================== BUTTON DELETE CLICK ==========================================================
 	if(isset($_POST['btnDeleteVisitor'])){
 		foreach ($_POST['checkboxVisitor'] as $selectedIdVisitor) {
-			$delUserQry = "DELETE FROM visitor WHERE idvisitor = '".$selectedIdVisitor."'";
+			$delVisitorQry = "DELETE FROM visitor WHERE idvisitor = '".$selectedIdVisitor."'";
 
-			if (mysqli_query($conn, $delUserQry)) {
+			// ======================================== LOGGING =============================
+				$nameDelVisitorQry = "";
+	            $nameDelVisitorQry = "SELECT idvisitor, datePost, firstName, lastName, phone, email, message FROM visitor WHERE idvisitor = '".$selectedIdVisitor."'";
+	            if($resultDelVisitorQry = mysqli_query($conn, $nameDelVisitorQry)){
+	                if (mysqli_num_rows($resultDelVisitorQry) > 0) {
+	                    while($rowDelVisitors = mysqli_fetch_array($resultDelVisitorQry)){
+	                        $idDelVisitors    		= $rowDelVisitors['idvisitor'];
+	                        $datePostDelVisitors  	= $rowDelVisitors['datePost'];
+	                        $firstNameDelVisitors  	= $rowDelVisitors['firstName'];
+	                        $lastNameDelVisitors  	= $rowDelVisitors['lastName'];
+	                        $phoneDelVisitors  		= $rowDelVisitors['phone'];
+	                        $emailDelVisitors  		= $rowDelVisitors['email'];
+	                        $messageDelVisitors  	= $rowDelVisitors['message'];
+	                    }
+	                }
+	            }
+			// ======================================== LOGGING =============================
+			if (mysqli_query($conn, $delVisitorQry)) {
+				logging($now, $user, "Delete User", "Date : ".$datePostDelVisitors."; <br>Name : ".$firstNameDelVisitors." ".$lastNameDelVisitors."; <br>Phone : ".$phoneDelVisitors."; <br>Email : ".$emailDelVisitors."; <br>Message : <br>".nl2br($messageDelVisitors).";", $selectedIdVisitor);
 			    $postMessages =  "Record deleted successfully";
 				$colorMessages = "green-text";
 			} else {
@@ -62,7 +80,7 @@
 				</thead>
 				<tbody>
 					<?php
-						if($resultVisitorQry = mysqli_query($conn, "SELECT *, DATE_FORMAT(datePost,'%e %b %Y - %H:%i') as datepost FROM visitor")){
+						if($resultVisitorQry = mysqli_query($conn, "SELECT *, DATE_FORMAT(datePost,'%e %b %Y - %H:%i') as datepost FROM visitor ORDER BY datePost ASC")){
 							if (mysqli_num_rows($resultVisitorQry) > 0) {
 								while ($rowVisitor = mysqli_fetch_array($resultVisitorQry)) {
 									$idvisitor         	= $rowVisitor['idvisitor'];
@@ -96,7 +114,9 @@
 											<?php echo $emailVisitor; ?>
 										</td>
 										<td>
-											<?php echo $messageVisitor; ?>
+											<p>
+												<?php echo nl2br($messageVisitor); ?>
+											</p>
 										</td>
 									</tr>
 									<?php
@@ -114,7 +134,7 @@
 					<h4>Deleting Confirmation</h4>
 					<h5>Are you sure want to delete selected item(s) ?</h5>
 				</div>
-				<div class="modal-footer col s12 mb-50">
+				<div class="modal-footer col s12 mb-10">
 					<button type="submit" name="btnDeleteVisitor" class="waves-effect waves-light btn green darken-4 right">Yes</button>
 					<a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
 				</div>

@@ -32,17 +32,21 @@
 	        $colorMessages = "red-text";
 		// if everything is ok, try to upload file
 		} else {
-		    if (move_uploaded_file($_FILES["addImageFileAboutClient"]["tmp_name"], $target_file)) {
+			$filename=basename($target_file,$imageFileType);
+            $newFileName=$filename.time().".".$imageFileType;
+            $filenameAdmin=basename($filePath,$imageFileType);
+            $newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+		    if (move_uploaded_file($_FILES["addImageFileAboutClient"]["tmp_name"], "../images/".$newFileName)) {
 				$insertAddAboutClient = "INSERT INTO client (name) VALUES ('".$postTitleAboutClient."')";
 				if(mysqli_query($conn, $insertAddAboutClient)){
 					$LastIdAboutClient = mysqli_insert_id($conn);
 
-					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Client Images', '".$filePath."', 'client', '".$LastIdAboutClient."')";
+					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Client Images', 'images/".$newFileNameAdmin."', 'client', '".$LastIdAboutClient."')";
 					if(mysqli_query($conn, $insertAddImages)){
-
+						logging($now, $user, "Add New Client Item", "Client Name : ".$postTitleAboutClient."<br>Client Images : ".$newFileName, $LastIdAboutClient);
 						$postMessages = "New client added";
 				        $colorMessages = "green-text";
-				        header('Location: ./index.php?menu=project&cat=client');
+				        // header('Location: ./index.php?menu=project&cat=client');
 				    }else{
 				    	$postMessages = "ERROR: Could not able to execute ".$insertAddImages.". " . mysqli_error($conn);
 			        	$colorMessages = "red-text";
@@ -63,7 +67,20 @@
 			$delAboutClientQry = "DELETE FROM client WHERE idclient = '".$selectedIdAboutClient."'";
 			$delImagesQry = "DELETE FROM images WHERE owner = 'client' AND idowner = '".$selectedIdAboutClient."'";
 
+			// ====================================== LOGING
+				$nameDelClientQry = "";
+				$nameDelClientQry = "SELECT idclient, name FROM client WHERE idclient in (".implode($_POST['checkboxAboutClient'], ',').")";
+				if($resultDelNameClientQry = mysqli_query($conn, $nameDelClientQry)){
+					if (mysqli_num_rows($resultDelNameClientQry) > 0) {
+						while($rowDelNameClient = mysqli_fetch_array($resultDelNameClientQry)){
+							$idDelClient	= $rowDelNameClient['idclient'];
+							$nameDelClient 	= $rowDelNameClient['name'];
+						}
+					}
+				}
+			// ====================================== LOGING
 			if (mysqli_query($conn, $delAboutClientQry) && mysqli_query($conn, $delImagesQry)) {
+    			logging($now, $user, "Delete Client Items", "Name : ".$nameDelClient, $idDelClient);
 			    $postMessages =  "Record deleted successfully";
 				$colorMessages = "green-text";
 			} else {
@@ -78,16 +95,30 @@
 
 	if(isset($_POST['updateSelectionAboutClientButton'])){
 		foreach ($_POST['checkboxAboutClient'] as $selectedIdAboutClient) {
-			$postUpdateTitleAboutClient = mysqli_real_escape_string($conn, $_POST['titleAboutClient'.$selectedIdAboutClient]);
+			$postUpdateTitleAboutClient = $_POST['titleAboutClient'.$selectedIdAboutClient];
 
 			$updateAboutClientQry = "UPDATE client SET name = '".$postUpdateTitleAboutClient."' WHERE idclient = '".$selectedIdAboutClient."'";
 
-			if (mysqli_query($conn, $updateAboutClientQry))	 {
-			    $postMessages =  "Record update successfully";
-				$colorMessages = "green-text";
-			} else {
-			    $postMessages = "Error updating record: " . mysqli_error($conn);
-	        	$colorMessages = "red-text";
+			// ================================== LOGGING
+				$nameUpdateProjectClientQry = "";
+				$nameUpdateProjectClientQry = "SELECT name FROM client WHERE idclient = '".$selectedIdAboutClient."' LIMIT 1";
+				if($resultUpdateProjectClientQry = mysqli_query($conn, $nameUpdateProjectClientQry)){
+					if (mysqli_num_rows($resultUpdateProjectClientQry) > 0) {
+						$rowUpdateProjectClient = mysqli_fetch_array($resultUpdateProjectClientQry);
+						$nameUpdateProjectClient        	= $rowUpdateProjectClient['name'];
+					}
+				}
+				$logingContentText = "Old Name : ".$nameUpdateProjectClient."<br>New Name : ".$postUpdateTitleAboutClient;
+			// ================================== LOGGING
+			if($postUpdateTitleAboutClient != $nameUpdateProjectClient){
+				if (mysqli_query($conn, $updateAboutClientQry))	 {
+					logging($now, $user, "Update Client Items", $logingContentText, $selectedIdAboutClient);
+				    $postMessages =  "Record update successfully";
+					$colorMessages = "green-text";
+				} else {
+				    $postMessages = "Error updating record: " . mysqli_error($conn);
+		        	$colorMessages = "red-text";
+				}
 			}
 		}
 	}
@@ -200,9 +231,9 @@
 										</div>
 										<!-- ======================== MODAL =========================================================== -->
 										<?php
-										$btnChangeImagesAboutClient = "btnChangeImagesAboutClient".$idimagesClient;
-										$changeImageFileAboutClient = "changeImageFileAboutClient".$idimagesClient;
-										$changeImagesPathAboutClient = "changeImagesPathAboutClient".$idimagesClient;
+										$btnChangeImagesAboutClient 	= "btnChangeImagesAboutClient".$idimagesClient;
+										$changeImageFileAboutClient 	= "changeImageFileAboutClient".$idimagesClient;
+										$changeImagesPathAboutClient 	= "changeImagesPathAboutClient".$idimagesClient;
 										if(isset($_POST[$btnChangeImagesAboutClient])){
 											$uploadOk = 1;
 											if(isset($_POST[$changeImagesPathAboutClient]) && $_POST[$changeImagesPathAboutClient] != ''){
@@ -234,7 +265,11 @@
 											        $colorMessages = "red-text";
 												// if everything is ok, try to upload file
 												} else {
-												    if (move_uploaded_file($_FILES[$changeImageFileAboutClient]["tmp_name"], $target_file)) {
+													$filename=basename($target_file,$imageFileType);
+                                                    $newFileName=$filename.time().".".$imageFileType;
+                                                    $filenameAdmin=basename($filePath,$imageFileType);
+                                                    $newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+												    if (move_uploaded_file($_FILES[$changeImageFileAboutClient]["tmp_name"], "../images/".$newFileName)) {
 
 												    	$delPrevImagesAboutClient = "SELECT path FROM images WHERE owner = 'Client' AND idimages = '".$idimagesClient."'";
 												    	if($resultAboutClient = mysqli_query($conn, $delPrevImagesAboutClient)){
@@ -245,12 +280,12 @@
 															}
 														}
 
-														$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE owner = 'Client' AND idimages = '".$idimagesClient."'";
+														$updateChangeImagesFile = "UPDATE images SET path = 'images/".$newFileNameAdmin."' WHERE owner = 'Client' AND idimages = '".$idimagesClient."'";
 														if(mysqli_query($conn, $updateChangeImagesFile)){
-
+															logging($now, $user, "Update Client Images", "../images/".$newFileName, $idimagesClient);
 															$postMessages = "Images Updated";
 													        $colorMessages = "green-text";
-					        								header('Location: ./index.php?menu=about&cat=client');
+					        								header('Location: ./index.php?menu=project&cat=client');
 													    }else{
 													    	$postMessages = "ERROR: Could not able to execute ".$updateChangeImagesFile.". " . mysqli_error($conn);
 												        	$colorMessages = "red-text";
@@ -281,7 +316,7 @@
 				<h4>Deleting Confirmation</h4>
 				<h5>Are you sure want to delete selected item(s) ?</h5>
 			</div>
-			<div class="modal-footer col s12 mb-50">
+			<div class="modal-footer col s12 mb-20">
 				<button type="submit" name="btnDeleteAboutClient" class="waves-effect waves-light btn green darken-4 right">Yes</button>
 				<a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
 			</div>

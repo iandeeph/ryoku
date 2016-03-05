@@ -33,14 +33,18 @@
 	        $colorMessages = "red-text";
 		// if everything is ok, try to upload file
 		} else {
-		    if (move_uploaded_file($_FILES["addImageFileAboutService"]["tmp_name"], $target_file)) {
+			$filename=basename($target_file,$imageFileType);
+			$newFileName=$filename.time().".".$imageFileType;
+			$filenameAdmin=basename($filePath,$imageFileType);
+			$newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+		    if (move_uploaded_file($_FILES["addImageFileAboutService"]["tmp_name"], "../images/".$newFileName)) {
 				$insertAddAboutService = "INSERT INTO service (name, contentWord) VALUES ('".$postTitleAboutService."', '".$postContentWordAboutService."')";
 				if(mysqli_query($conn, $insertAddAboutService)){
 					$LastIdAboutService = mysqli_insert_id($conn);
 
-					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Service Images', '".$filePath."', 'Service', '".$LastIdAboutService."')";
+					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Service Images', 'images/".$newFileNameAdmin."', 'Service', '".$LastIdAboutService."')";
 					if(mysqli_query($conn, $insertAddImages)){
-
+    					logging($now, $user, "Add New Service Items", "Name : ".$postTitleAboutService."<br>Description : ".$postContentWordAboutService."<br>Images : ".$target_file, $LastIdAboutService);
 						$postMessages = "New Service added";
 				        $colorMessages = "green-text";
 				        header('Location: ./index.php?menu=about&cat=service');
@@ -61,10 +65,22 @@
 // ============================== BUTTON DELETE CLICK ==========================================================
 	if(isset($_POST['btnDeleteAboutService'])){
 		foreach ($_POST['checkboxAboutService'] as $selectedIdAboutService) {
+		// ========================== LOGING
+			$nameDelServiceQry = "";
+			$nameDelServiceQry = "SELECT name, contentWord FROM service WHERE idservice = '".$selectedIdAboutService."' LIMIT 1";
+			if($resultDelNameServiceQry = mysqli_query($conn, $nameDelServiceQry)){
+				if (mysqli_num_rows($resultDelNameServiceQry) > 0) {
+					$rowDelNameService = mysqli_fetch_array($resultDelNameServiceQry);
+					$nameDelService        	= $rowDelNameService['name'];
+					$contentWordDelService	= $rowDelNameService['contentWord'];
+				}
+			}
+		// ========================== LOGING
 			$delAboutServiceQry = "DELETE FROM service WHERE idservice = '".$selectedIdAboutService."'";
 			$delImagesQry = "DELETE FROM images WHERE owner = 'service' AND idowner = '".$selectedIdAboutService."'";
 
-			if (mysqli_query($conn, $delAboutServiceQry) && mysqli_query($conn, $delImagesQry)) {
+			if (mysqli_query($conn, $delAboutServiceQry) && mysqli_query($conn, $delImagesQry)){
+    			logging($now, $user, "Delete Service Items", "Name : ".$nameDelService."<br>Description : ".$contentWordDelService, $selectedIdAboutService);
 			    $postMessages =  "Record deleted successfully";
 				$colorMessages = "green-text";
 			} else {
@@ -80,17 +96,31 @@
 
 	if(isset($_POST['updateSelectionAboutServiceButton'])){
 		foreach ($_POST['checkboxAboutService'] as $selectedIdAboutService) {
-			$postUpdateTitleAboutService = mysqli_real_escape_string($conn, $_POST['titleAboutService'.$selectedIdAboutService]);
-			$postUpdateContentWordAboutService = mysqli_real_escape_string($conn, $_POST['contentWordAboutService'.$selectedIdAboutService]);
+			$postUpdateTitleAboutService = $_POST['titleAboutService'.$selectedIdAboutService];
+			$postUpdateContentWordAboutService = $_POST['contentWordAboutService'.$selectedIdAboutService];
 
-			$updateAboutServiceQry = "UPDATE service SET contentWord = '".$postUpdateContentWordAboutService."', name = '".$postUpdateTitleAboutService."' WHERE idservice = '".$selectedIdAboutService."'";
-
-			if (mysqli_query($conn, $updateAboutServiceQry))	 {
-			    $postMessages =  "Record update successfully";
-				$colorMessages = "green-text";
-			} else {
-			    $postMessages = "Error updating record: " . mysqli_error($conn);
-	        	$colorMessages = "red-text";
+			// ===================================== LOGING
+			$nameDelServiceQry = "";
+			$nameDelServiceQry = "SELECT name, contentWord FROM service WHERE idservice = '".$selectedIdAboutService."' LIMIT 1";
+			if($resultDelNameServiceQry = mysqli_query($conn, $nameDelServiceQry)){
+				if (mysqli_num_rows($resultDelNameServiceQry) > 0) {
+					$rowDelNameService = mysqli_fetch_array($resultDelNameServiceQry);
+					$nameDelService        	= $rowDelNameService['name'];
+					$contentWordDelService	= $rowDelNameService['contentWord'];
+				}
+			}
+			if($postUpdateTitleAboutService != $nameDelService || $postUpdateContentWordAboutService != $contentWordDelService){
+				$updateAboutServiceQry = "UPDATE service SET contentWord = '".$postUpdateContentWordAboutService."', name = '".$postUpdateTitleAboutService."' WHERE idservice = '".$selectedIdAboutService."'";
+				// ===================================== LOGING
+				if (mysqli_query($conn, $updateAboutServiceQry)){
+					$loggingContentText = "Old Name : ".$nameDelService."<br>Old Description :<br>".$contentWordDelService."<br><br>New Name : ".$postUpdateTitleAboutService."<br>New Description : <br>".$postUpdateContentWordAboutService."";
+	    			logging($now, $user, "Update Service Items", $loggingContentText, $selectedIdAboutService);
+				    $postMessages =  "Record update successfully";
+					$colorMessages = "green-text";
+				} else {
+				    $postMessages = "Error updating record: " . mysqli_error($conn);
+		        	$colorMessages = "red-text";
+				}
 			}
 		}
 	}
@@ -105,7 +135,7 @@
 			<?php
 				if($_SESSION['privilege'] == '1'){
 					?>
-						<a id="delSelectionAboutServiceButton" href="#modalDelAboutServiceItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+						<a id="delSelectionAboutServiceButton" href="#modalDelAboutServiceItems" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
 					<?php
 				}
 			?>
@@ -198,9 +228,9 @@
 											</div>
 											<!-- ======================== MODAL =========================================================== -->
 										<?php
-										$btnChangeImagesAboutService = "btnChangeImagesAboutService".$idimages;
-										$changeImageFileAboutService = "changeImageFileAboutService".$idimages;
-										$changeImagesPathAboutService = "changeImagesPathAboutService".$idimages;
+										$btnChangeImagesAboutService 	= "btnChangeImagesAboutService".$idimages;
+										$changeImageFileAboutService 	= "changeImageFileAboutService".$idimages;
+										$changeImagesPathAboutService 	= "changeImagesPathAboutService".$idimages;
 										if(isset($_POST[$btnChangeImagesAboutService])){
 											$uploadOk = 1;
 											if(isset($_POST[$changeImagesPathAboutService]) && $_POST[$changeImagesPathAboutService] != ''){
@@ -232,7 +262,11 @@
 											        $colorMessages = "red-text";
 												// if everything is ok, try to upload file
 												} else {
-												    if (move_uploaded_file($_FILES[$changeImageFileAboutService]["tmp_name"], $target_file)) {
+													$filename=basename($target_file,$imageFileType);
+													$newFileName=$filename.time().".".$imageFileType;
+													$filenameAdmin=basename($filePath,$imageFileType);
+													$newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+												    if (move_uploaded_file($_FILES[$changeImageFileAboutService]["tmp_name"], "../images/".$newFileName)) {
 
 												    	$delPrevImagesAboutService = "SELECT path FROM images WHERE owner = 'Service' AND idimages = '".$idimages."'";
 												    	if($resultAboutService = mysqli_query($conn, $delPrevImagesAboutService)){
@@ -243,9 +277,10 @@
 															}
 														}
 
-														$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE owner = 'Service' AND idimages = '".$idimages."'";
+														$updateChangeImagesFile = "UPDATE images SET path = 'images/".$newFileNameAdmin."' WHERE owner = 'Service' AND idimages = '".$idimages."'";
 														if(mysqli_query($conn, $updateChangeImagesFile)){
-
+															
+    														logging($now, $user, "Update Service Images", "Images Name : ".$_POST[$changeImagesPathAboutService], $idimages);
 															$postMessages = "Images Updated";
 													        $colorMessages = "green-text";
 					        								header('Location: ./index.php?menu=about&cat=service');
@@ -279,7 +314,7 @@
 				<h4>Deleting Confirmation</h4>
 				<h5>Are you sure want to delete selected item(s) ?</h5>
 			</div>
-			<div class="modal-footer col s12 mb-50">
+			<div class="modal-footer col s12 mb-30">
 				<button type="submit" name="btnDeleteAboutService" class="waves-effect waves-light btn green darken-4 right">Yes</button>
 				<a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
 			</div>

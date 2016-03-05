@@ -1,12 +1,18 @@
 <div class="row">
 <?php
+    $postMessages = isset($postMessages)?$postMessages:'';
+    $colorMessages = isset($colorMessages)?$colorMessages:'';
     if(isset($_GET['menu']) == 'project' && isset($_GET['detail'])){
         include 'project-detail.php';
     }else{
         $projNameASC = "ORDER BY project.name ASC";
         $projNameDESC = "ORDER BY project.name DESC";
+        $projCategoryASC = "ORDER BY project.category ASC";
+        $projCategoryDESC = "ORDER BY project.category DESC";
         $projDateASC = "ORDER BY project.date ASC";
         $projDateDESC = "ORDER BY project.date DESC";
+        $projProductASC = "ORDER BY project.product ASC";
+        $projProductDESC = "ORDER BY project.product DESC";
         $projLocASC = "ORDER BY project.location ASC";
         $projLocDESC = "ORDER BY project.location DESC";
         $clienNameASC = "ORDER BY client.name ASC";
@@ -21,6 +27,8 @@
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'name' && $sort == 'desc')
         {
@@ -29,38 +37,89 @@
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+        }
+        elseif($menu == 'project' && $sortProjList == 'category' && $sort == 'asc')
+        {
+            $orderSortProjListQry = $projCategoryASC;
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+        }
+        elseif($menu == 'project' && $sortProjList == 'category' && $sort == 'desc')
+        {
+            $orderSortProjListQry = $projCategoryDESC;
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'location' && $sort == 'asc')
         {
             $orderSortProjListQry = $projLocASC;
-            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i>';
-            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'location' && $sort == 'desc')
         {
             $orderSortProjListQry = $projLocDESC;
-            $sortIconDate = '<i class="material-icons small">arrow_drop_up</i>';
-            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'date' && $sort == 'asc')
         {
             $orderSortProjListQry = $projDateASC;
-            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i>';
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i>';
+            $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+        }
+        elseif($menu == 'project' && $sortProjList == 'date' && $sort == 'desc')
+        {
+            $orderSortProjListQry = $projDateDESC;
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconDate = '<i class="material-icons small">arrow_drop_up</i>';
+            $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+        }
+        elseif($menu == 'project' && $sortProjList == 'product' && $sort == 'asc')
+        {
+            $orderSortProjListQry = $projDateASC;
+            $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i>';
         }
-        elseif($menu == 'project' && $sortProjList == 'date' && $sort == 'desc')
+        elseif($menu == 'project' && $sortProjList == 'product' && $sort == 'desc')
         {
             $orderSortProjListQry = $projDateDESC;
             $sortIconLocation = '<i class="material-icons small">arrow_drop_up</i>';
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'client' && $sort == 'asc')
         {
@@ -69,6 +128,8 @@
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
         elseif($menu == 'project' && $sortProjList == 'client' && $sort == 'desc')
         {
@@ -77,24 +138,43 @@
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }else{
             $orderSortProjListQry = "";
             $sortIconClient = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconDate = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconLocation = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
             $sortIconProject = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconCategory = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
+            $sortIconProduct = '<i class="material-icons small">arrow_drop_down</i><i class="material-icons small">arrow_drop_up</i>';
         }
 
 // ========================================= ADD PROJECT SUBMIT =======================
     if(isset($_POST['btnAddProjectSubmit'])){
         $postaddProjName            = $_POST['addProjName'];
         $postclientProjAddSelect    = $_POST['clientProjAddSelect'];
-        $postaddProjDate            = date("Y-m-d", strtotime(str_replace(',', '', mysqli_real_escape_string($conn, $_POST['addProjDate']))));
+        $postaddProjDate            = $_POST['addProjDate'];
         $postaddProjLocation        = $_POST['addProjLocation'];
         $postaddContentWordProject  = $_POST['addContentWordProject'];
+        $postcatProjAddSelect       = $_POST['catProjAddSelect'];
+        $postaddProjProduct         = $_POST['addProjProduct'];
 
-        $insertNewProject = "INSERT INTO project (name, idclient, date, location, contentWord) VALUES ('".$postaddProjName."', '".$postclientProjAddSelect."', '".$postaddProjDate."', '".$postaddProjLocation."', '".$postaddContentWordProject."')";
+        $insertNewProject = "INSERT INTO project (name, idclient, date, location, contentWord, category, product) VALUES ('".$postaddProjName."', '".$postclientProjAddSelect."', '".$postaddProjDate."', '".$postaddProjLocation."', '".$postaddContentWordProject."', '".$postcatProjAddSelect."', '".$postaddProjProduct."')";
+        // ================================================= LOGING
+            $clientNameQry = "";
+            $clientNameQry = "SELECT name FROM client WHERE idclient = '".$postclientProjAddSelect."' LIMIT 1";
+
+            if($resultclientNameQry = mysqli_query($conn, $clientNameQry) or die("Query failed :".mysqli_error($conn))){
+                if(mysqli_num_rows($resultclientNameQry) > 0){
+                    $rowClientName = mysqli_fetch_array($resultclientNameQry);
+                    $nameclient = $rowClientName['name'];
+                }
+            }
+            $logingText = "Name : ".$postaddProjName."<br>Category : ".$postcatProjAddSelect."<br>Location : ".$postaddProjLocation."<br>Date : ".$postaddProjDate."<br>Product : ".$postaddProjProduct."<br>Client Name : ".$nameclient."<br>Description :<br>".$postaddContentWordProject;
+        // ================================================= LOGING
         if(mysqli_query($conn, $insertNewProject)){
+            logging($now, $user, "Add Project Items", $logingText, $postclientProjAddSelect);
             header('Location: ./index.php?menu=project&cat=list');
         }else{
             $postMessages = "ERROR: Could not able to execute ".$insertNewProject.". " . mysqli_error($conn);
@@ -106,6 +186,40 @@
     if(isset($_POST['btnDeleteProjectList'])){
         $delProjQry = "DELETE FROM project WHERE idproject in (".implode($_POST['checkboxProjectList'], ',').")";
 
+    // =================================================== LOGING
+        foreach ($_POST['checkboxProjectList'] as $selectedIdProjectList) {
+            $upprojDetQry = "SELECT 
+                    project.idproject as idproject,
+                    project.name as name,
+                    project.contentWord as contentWord,
+                    project.location as location,
+                    project.date as date,
+                    project.category as category,
+                    project.product as product,
+                    client.name as clientName
+                    FROM 
+                        project,
+                        client
+                    WHERE project.idclient = client.idclient AND project.idproject = '".$selectedIdProjectList."'";
+
+            if($delresultProjDetail = mysqli_query($conn, $upprojDetQry) or die("Query failed :".mysqli_error($conn))){
+                if(mysqli_num_rows($delresultProjDetail) > 0){
+                    $delrowProjDetail = mysqli_fetch_array($delresultProjDetail);
+                    $delidProject                = $delrowProjDetail['idproject'];
+                    $delnameProjDetail           = $delrowProjDetail['name'];
+                    $delcontentWordProjDetail    = $delrowProjDetail['contentWord'];
+                    $delnameClientProjDetail     = $delrowProjDetail['clientName'];
+                    $dellocationProjDetail       = $delrowProjDetail['location'];
+                    $deldateProjDetail           = $delrowProjDetail['date'];
+                    $delcatProjDetail            = $delrowProjDetail['category'];
+                    $delprodProjDetail           = $delrowProjDetail['product'];
+
+                    $logingText = "Name : ".$delnameProjDetail."<br>Category : ".$delcatProjDetail."<br>Location : ".$dellocationProjDetail."<br>Date : ".$deldateProjDetail."<br>Product : ".$delprodProjDetail."<br>Client Name : ".$delnameClientProjDetail."<br>Description :<br>".$delcontentWordProjDetail;
+                    logging($now, $user, "Delete Project Items", $logingText, $delidProject);
+                }
+            }
+        }
+    // =================================================== LOGING
         if(mysqli_query($conn, $delProjQry)){
             $delImagesQry = "DELETE FROM images WHERE owner = 'project' AND idowner in (".implode($_POST['checkboxProjectList'], ',').")";
 
@@ -143,39 +257,60 @@
             <?php
                 if($_SESSION['privilege'] == '1'){
                     ?>
-                        <a id="delSelectionProject" href="#modalDelProjectItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled mt-30" disabled><i class="material-icons left">delete</i>Delete</a>
+                        <a id="delSelectionProject" href="#modalDelProjectItems" class="waves-effect waves-light btn red accent-4 disabled mt-30" disabled><i class="material-icons left">delete</i>Delete</a>
                     <?php
                 }
             ?>
-            <a href="#addProjectModal" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add more images"><i class="material-icons">add</i></a>
+            <a href="#addProjectModal" class="modal-trigger btn-floating btn-large waves-effect waves-light green darken-4 right mb-30" title="Add New Project"><i class="material-icons">add</i></a>
+        </div>
+        <div class="col s12">
+            <span class="<?php echo $colorMessages;?>"><?php echo $postMessages;?></span>
         </div>
         <div class="col s12">
             <form action="#" method="post" enctype="multipart/form-data">
-                <table class="highlight responsive-table">
+                <table class="highlight striped responsive-table">
                     <thead>
-                            <td width="50px">
+                        <tr class="hide-on-small-only">
+                            <th width="03%">
                                 <p>
                                     <input type="checkbox" id="checkAllProjList" />
                                     <label for="checkAllProjList"></label>
                                 </p>
-                            </td>
-                            <td>
-                                <div><a href="./index.php?menu=project&cat=list&sortProjList=name&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>">Project name<?php echo $sortIconProject; ?></a></div>
-                            </td>
-                            <td>
-                                <div><a href="./index.php?menu=project&cat=list&sortProjList=location&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Location</span><?php echo $sortIconDate; ?></a></div>
-                            </td>
-                            <td>
-                                <div><a href="./index.php?menu=project&cat=list&sortProjList=date&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Date</span><?php echo $sortIconLocation; ?></a></div>
-                            </td>
-                            <td>
+                            </th>
+                            <th width="20%">
+                                <div><a href="./index.php?menu=project&cat=list&sortProjList=name&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>">Project Name<?php echo $sortIconProject; ?></a></div>
+                            </th>
+                            <th width="10%">
+                                <div><a href="./index.php?menu=project&cat=list&sortProjList=category&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>">Category<?php echo $sortIconCategory; ?></a></div>
+                            </th>
+                            <th width="13%">
+                                <div><a href="./index.php?menu=project&cat=list&sortProjList=location&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Location</span><?php echo $sortIconLocation; ?></a></div>
+                            </th>
+                            <th width="10%">
+                                <div><a href="./index.php?menu=project&cat=list&sortProjList=product&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Product</span><?php echo $sortIconProduct; ?></a></div>
+                            </th>
+                            <th width="10%">
+                                <div><a href="./index.php?menu=project&cat=list&sortProjList=date&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Year</span><?php echo $sortIconDate; ?></a></div>
+                            </th>
+                            <th width="15%">
                                 <div><a href="./index.php?menu=project&cat=list&sortProjList=client&sort=<?php echo ($sort == 'asc') ? 'desc':'asc' ?>"><span class="black-font">Client</span><?php echo $sortIconClient; ?></a></div>
-                            </td>
-                            <td>
+                            </th>
+                            <th width="05%">
                                 Total Images
-                            </td>
-                            <td>
-                            </td>
+                            </th>
+                            <th width="15%">
+                            </th>
+                        </tr>
+                        <tr class="hide-on-med-and-up">
+                            <th><p><input type="checkbox" id="checkAllProjList" /><label for="checkAllProjList"></label></p></th>
+                            <th>Project Name</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Product</th>
+                            <th>Year</th>
+                            <th>Client</th>
+                            <th>Total Images</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,8 +319,10 @@
                             $projListQry = "SELECT 
                                             project.idproject as idproject,
                                             project.name as name,
+                                            project.category as category,
                                             project.location as location,
                                             project.date as date,
+                                            project.product as product,
                                             client.name as clientName
                                             FROM 
                                                 project,
@@ -198,8 +335,10 @@
                                     while($rowProjList = mysqli_fetch_array($resultProjList)){
                                         $idProject          = $rowProjList['idproject'];
                                         $nameProjList       = $rowProjList['name'];
-                                        $nameClientProjList = $rowProjList['location'];
-                                        $dateProjList       = date("j F, Y", strtotime($rowProjList['date']));
+                                        $categoryList       = $rowProjList['category'];
+                                        $prodList           = $rowProjList['product'];
+                                        $locationProjList   = $rowProjList['location'];
+                                        $dateProjList       = $rowProjList['date'];
                                         $clientNameList     = $rowProjList['clientName'];
 
                                         $totImagesProjList = "SELECT count(*) as totalImagesProjList FROM images WHERE owner = 'project' AND idowner = '".$idProject."'";
@@ -221,7 +360,13 @@
                                                     <?php echo $nameProjList; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $nameClientProjList; ?>
+                                                    <?php echo $categoryList; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $locationProjList; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $prodList; ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $dateProjList; ?>
@@ -250,7 +395,7 @@
                         <h4>Deleting Confirmation</h4>
                         <h5>Are you sure you want to delete selected item(s) ?</h5>
                     </div>
-                    <div class="modal-footer col s12 mb-50">
+                    <div class="modal-footer col s12 mb-30">
                         <button type="submit" name="btnDeleteProjectList" class="waves-effect waves-light btn green darken-4 right">Yes</button>
                         <a href="#!" class="modal-action modal-close waves-effect waves-light btn blue darken-4 right">Cancel</a>
                     </div>
@@ -292,10 +437,37 @@
                                 <label>Select Brand</label>
                             </div>
 
-            <!-- ========================================== PROJECT DATE -->    
+            <!-- ========================================== PROJECT CATEGORY -->
+                         <div id="categoryWrapper" class="col s12 m6 l6">
+                            <div id="selectCategoryWrapper" class="input-field">
+                                <select id="catProjAddSelect" name="catProjAddSelect" required>
+                                    <option selected disabled>Select Category</option>
+                                    <option value="engineering">Engineering</option>
+                                    <option value="civil">Civil Engineering</option>
+                                </select>
+                                <label>Select Category</label>
+                            </div>
+                        </div>
+
+            <!-- ========================================== PROJECT PRODUCT -->    
+                            <div class="input-field col s12 m6 l6 mb-30">
+                              <input id="addProjProduct" name="addProjProduct" type="text" class="validate">
+                              <label for="addProjProduct">Product</label>
+                            </div>
+
+            <!-- ========================================== PROJECT DATE -->
                             <div class="input-field col s12 m6 l6">
-                              <input id="addProjDate" name="addProjDate" type="date" class="datepicker">
-                              <label for="addProjDate">Date Project</label>
+                                <select id="addProjDate" name="addProjDate">
+                                    <option value="" selected class="red-text" disabled>Select Year</option>
+                                    <?php
+                                        for ($i=1990; $i < 2030 ; $i++) {
+                                            ?>
+                                                <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                                            <?php
+                                        }
+                                    ?>
+                                </select>
+                                <label>Date Project</label>
                             </div>
 
             <!-- ========================================== PROJECT LOCATION -->

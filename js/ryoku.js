@@ -46,8 +46,20 @@ $(document).ready(function() {
         $("#subCatLabel").addClass('active');
     });
 
+    $("#btnAddProjectCategory").click(function(){
+        var projCatValue = $("#addProjectCategory").val();
+        $("#selectCategoryWrapper").remove();
+        $("#categoryWrapper").append('<div id="inputProjCatWrapper" class="input-field"><input id="projCatAddInput" name="catProjAddSelect" type="text" class="validate"><label id="projCatLabel" for="projCatAddInput">Project Category</label></div>');
+        $("#projCatAddInput").val(projCatValue);
+        $("#projCatLabel").addClass('active');
+    });
+
     $(".dropdown-button").dropdown();$('.collapsible').collapsible({
         accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+
+    $('#selectCatExperienceList').change(function() {
+        this.form.submit();
     });
 
     $("#addUserReenterPassword").keyup(checkPasswordMatch);
@@ -100,31 +112,36 @@ $('input[id^="checkAll"]').change(function() {
 $('input:checkbox').change(function () {
     if ($(this).is(':checked')) {
         $('a[id^="delSelection"], button[id^="updateSelection"]').removeClass('disabled');
+        $('a[id^="delSelection"], button[id^="updateSelection"]').removeAttr('disabled');
         $('a[id^="delSelection"]').addClass('modal-trigger');
-        $('a[id^="delSelection"], button[id^="updateSelection"]').prop("disabled", false);
+        $('.modal-trigger').leanModal();
     } else if (($(this).not(':checked')) && ($("input:checkbox:checked").length <= 0)) {
         $('a[id^="delSelection"], button[id^="updateSelection"]').addClass('disabled');
         $('a[id^="delSelection"]').removeClass('modal-trigger');
-        $('a[id^="delSelection"], button[id^="updateSelection"]').prop("disabled", true);
+        $('a[id^="delSelection"], button[id^="updateSelection"]').attr('disabled', '');
         $('input[id^="checkAll"]').prop('checked', false);
+        $('a[id^="delSelection').leanModal().unbind();
     }
 });
 
-$("input[name^='title'], textarea[name^='contentWord'], input[name^='linkAboutSocial']").change(function () {
+$("input[name^='title'], textarea[name^='contentWord'], input[name^='linkAboutSocial'], input[name^='originProductBrand'], input[name^='categoryProductBrand'], textarea[name^='descriptionProductBrand']").change(function () {
     $(this).closest('tr').find(':checkbox').prop('checked', true);
     $('button[id^="updateSelection"]').removeClass('disabled');
-    $('button[id^="updateSelection"]').prop("disabled", false);
-    if ($(this).closest('tr').find(':checkbox').is(":disabled")) {
+    $('button[id^="updateSelection"]').removeAttr('disabled');
+    if ($(this).closest('tr').find(':checkbox').is(":disabled") || parseInt($(this).closest('tr').find("input[name^='productCountProductBrand']").val()) > 0) {
         $('a[id^="delSelection"]').addClass('disabled');
         $('a[id^="delSelection"]').removeClass('modal-trigger');
-        $(this).closest('tr').find(':checkbox').prop('disabled', false);
-    } else{
+        $('a[id^="delSelection"]').attr('disabled', '');
+        $(this).closest('tr').find(':checkbox').prop('checked', true);
+        $(this).closest('tr').find(':checkbox').removeAttr('disabled');
+    }else{
         $('a[id^="delSelection"]').removeClass('disabled');
         $('a[id^="delSelection"]').addClass('modal-trigger');
+        $('a[id^="delSelection"]').removeAttr('disabled');
     }
 });
 
 $("#changeImagePathAboutContact, #nameCompany, #phoneCompany, #faxCompany, #addressCompany").change(function () {
     $('#btnUpdateAboutContact').removeClass('disabled');
-    $('#btnUpdateAboutContact').prop("disabled", false);
+    $('#btnUpdateAboutContact').removeAttr('disabled');
 });

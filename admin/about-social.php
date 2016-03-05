@@ -33,12 +33,17 @@
 	        $colorMessages = "red-text";
 		// if everything is ok, try to upload file
 		} else {
-		    if (move_uploaded_file($_FILES["addImageFileAboutSocial"]["tmp_name"], $target_file)) {
+			$filename=basename($target_file,$imageFileType);
+			$newFileName=$filename.time().".".$imageFileType;
+			$filenameAdmin=basename($filePath,$imageFileType);
+			$newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+		    if (move_uploaded_file($_FILES["addImageFileAboutSocial"]["tmp_name"], "../images/".$newFileName)) {
 				$insertAddAboutSocial = "INSERT INTO social (name, link) VALUES ('".$postTitleAboutSocial."', '".$postLinkAboutSocial."')";
 				if(mysqli_query($conn, $insertAddAboutSocial)){
 					$LastIdAboutSocial = mysqli_insert_id($conn);
+				    logging($now, $user, "Add New Social Item", "Name : ".$postTitleAboutSocial."<br>Link : ".$postLinkAboutSocial, $LastIdAboutSocial);
 
-					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Social Images', '".$filePath."', 'social', '".$LastIdAboutSocial."')";
+					$insertAddImages = "INSERT INTO images (title, path, owner, idowner) VALUES ('Social Images', 'images/".$newFileNameAdmin."', 'social', '".$LastIdAboutSocial."')";
 					if(mysqli_query($conn, $insertAddImages)){
 
 						$postMessages = "New social added";
@@ -64,7 +69,19 @@
 			$delAboutSocialQry = "DELETE FROM social WHERE idsocial = '".$selectedIdAboutSocial."'";
 			$delImagesQry = "DELETE FROM images WHERE owner = 'social' AND idowner = '".$selectedIdAboutSocial."'";
 
+			// ================================== LOGGING
+				$nameDelSocialQry = "";
+				$nameDelSocialQry = "SELECT name, link FROM social WHERE idsocial = '".$selectedIdAboutSocial."' LIMIT 1";
+				if($resultDelNameSocialQry = mysqli_query($conn, $nameDelSocialQry)){
+					if (mysqli_num_rows($resultDelNameSocialQry) > 0) {
+						$rowDelNameSocial = mysqli_fetch_array($resultDelNameSocialQry);
+						$nameDelSocial        	= $rowDelNameSocial['name'];
+						$linkDelSocial        	= $rowDelNameSocial['link'];
+					}
+				}
+			// ================================== LOGGING
 			if (mysqli_query($conn, $delAboutSocialQry) && mysqli_query($conn, $delImagesQry)) {
+				logging($now, $user, "Delete Social Item", "Name : ".$nameDelSocial."<br>Link : ".$linkDelSocial, $selectedIdAboutSocial);
 			    $postMessages =  "Record deleted successfully";
 				$colorMessages = "green-text";
 			} else {
@@ -85,12 +102,28 @@
 
 			$updateAboutSocialQry = "UPDATE social SET name = '".$postUpdateTitleAboutSocial."', link = '".$postUpdateLinkAboutSocial."' WHERE idsocial = '".$selectedIdAboutSocial."'";
 
-			if (mysqli_query($conn, $updateAboutSocialQry))	 {
-			    $postMessages =  "Record update successfully";
-				$colorMessages = "green-text";
-			} else {
-			    $postMessages = "Error updating record: " . mysqli_error($conn);
-	        	$colorMessages = "red-text";
+		// ================================== LOGGING
+			$nameUpdateSocialQry = "";
+			$nameUpdateSocialQry = "SELECT name, link FROM social WHERE idsocial = '".$selectedIdAboutSocial."' LIMIT 1";
+			if($resultUpdateSocialQry = mysqli_query($conn, $nameUpdateSocialQry)){
+				if (mysqli_num_rows($resultUpdateSocialQry) > 0) {
+					$rowUpdateSocial = mysqli_fetch_array($resultUpdateSocialQry);
+					$nameUpdateSocial        	= $rowUpdateSocial['name'];
+					$linkUpdateSocial        	= $rowUpdateSocial['link'];
+				}
+			}
+
+			if($postUpdateTitleAboutSocial != $nameUpdateSocial || $postUpdateLinkAboutSocial != $linkUpdateSocial){
+				$logingContentText = "Old Name : ".$nameUpdateSocial."<br>Old Link : ".$linkUpdateSocial."<br>New Name : ".$postUpdateTitleAboutSocial."<br>New Link : ".$postUpdateLinkAboutSocial;
+			// ================================== LOGGING
+				if (mysqli_query($conn, $updateAboutSocialQry))	 {
+					logging($now, $user, "Update Social Item", $logingContentText, $selectedIdAboutSocial);
+				    $postMessages =  "Record update successfully";
+					$colorMessages = "green-text";
+				} else {
+				    $postMessages = "Error updating record: " . mysqli_error($conn);
+		        	$colorMessages = "red-text";
+				}
 			}
 		}
 	}
@@ -100,16 +133,30 @@
 
 if(isset($_POST['btnAboutSocialContentWord'])){
 	$postContentWordAboutSocial = $_POST['aboutSocialContentWord'];
-	$postIdSocial = mysqli_real_escape_string($conn, $_POST['aboutSocialId']);
+	$postIdSocial = $_POST['aboutSocialId'];
 
 	$updateContentWordAboutSocialQry = "UPDATE social SET contentWord = '".$postContentWordAboutSocial."' WHERE idsocial = '".$postIdSocial."'";
 
-	if (mysqli_query($conn, $updateContentWordAboutSocialQry))	 {
-	    $postMessages =  "Word for Social update successfully";
-		$colorMessages = "green-text";
-	} else {
-	    $postMessages = "Error updating record: " . mysqli_error($conn);
-    	$colorMessages = "red-text";
+	// ================================== LOGGING
+	$nameUpdateContentWordSocialQry = "";
+	$nameUpdateContentWordSocialQry = "SELECT contentWord FROM social WHERE idsocial = '".$postIdSocial."' LIMIT 1";
+	if($resultUpdateContentWordSocialQry = mysqli_query($conn, $nameUpdateContentWordSocialQry)){
+		if (mysqli_num_rows($resultUpdateContentWordSocialQry) > 0) {
+			$rowUpdateContentWordSocial = mysqli_fetch_array($resultUpdateContentWordSocialQry);
+			$contentWordUpdateSocial   = $rowUpdateContentWordSocial['contentWord'];
+		}
+	}
+	if(strip_tags($postContentWordAboutSocial) != strip_tags($contentWordUpdateSocial)){
+		$logingContentText = "Old Description : ".$contentWordUpdateSocial."<br>New Description : ".$postContentWordAboutSocial;
+	// ================================== LOGGING
+		if (mysqli_query($conn, $updateContentWordAboutSocialQry)){
+			logging($now, $user, "Update Social Description", $logingContentText, $postIdSocial);
+		 //    $postMessages =  "Word for Social update successfully";
+			// $colorMessages = "green-text";
+		} else {
+		    $postMessages = "Error updating record: " . mysqli_error($conn);
+	    	$colorMessages = "red-text";
+		}
 	}
 }
 // ============================== BUTTON UPDATE WORD SOCIAL CLICK ==========================================================
@@ -124,7 +171,7 @@ if(isset($_POST['btnAboutSocialContentWord'])){
 				<?php
 					if($_SESSION['privilege'] == '1'){
 						?>
-							<a id="delSelectionAboutSocialButton" href="#modalDelAboutSocialItems" class="modal-trigger waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
+							<a id="delSelectionAboutSocialButton" href="#modalDelAboutSocialItems" class="waves-effect waves-light btn red accent-4 disabled" disabled><i class="material-icons left">delete</i>Delete</a>
 						<?php
 					}
 				?>
@@ -252,7 +299,11 @@ if(isset($_POST['btnAboutSocialContentWord'])){
 											        $colorMessages = "red-text";
 												// if everything is ok, try to upload file
 												} else {
-												    if (move_uploaded_file($_FILES[$changeImageFileAboutsocial]["tmp_name"], $target_file)) {
+													$filename=basename($target_file,$imageFileType);
+													$newFileName=$filename.time().".".$imageFileType;
+													$filenameAdmin=basename($filePath,$imageFileType);
+													$newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+												    if (move_uploaded_file($_FILES[$changeImageFileAboutsocial]["tmp_name"], "../images/".$newFileName)) {
 
 												    	$delPrevImagesAboutsocial = "SELECT path FROM images WHERE owner = 'social' AND idimages = '".$idimagessocial."'";
 												    	if($resultAboutsocial = mysqli_query($conn, $delPrevImagesAboutsocial)){
@@ -263,9 +314,9 @@ if(isset($_POST['btnAboutSocialContentWord'])){
 															}
 														}
 
-														$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE owner = 'social' AND idimages = '".$idimagessocial."'";
+														$updateChangeImagesFile = "UPDATE images SET path = 'images/".$newFileNameAdmin."' WHERE owner = 'social' AND idimages = '".$idimagessocial."'";
 														if(mysqli_query($conn, $updateChangeImagesFile)){
-
+															logging($now, $user, "Update Social Images", "../images/".$newFileName, $idimagessocial);
 															$postMessages = "Images Updated";
 													        $colorMessages = "green-text";
 					        								header('Location: ./index.php?menu=about&cat=social');

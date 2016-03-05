@@ -37,20 +37,25 @@ if(isset($_POST['btnUpdateAboutContact'])){
 	        $colorMessages = "red-text";
 		// if everything is ok, try to upload file
 		} else {
-		    if (move_uploaded_file($_FILES["changeImageFileAboutContact"]["tmp_name"], $target_file)) {
+			$filename=basename($target_file,$imageFileType);
+            $newFileName=$filename.time().".".$imageFileType;
+            $filenameAdmin=basename($filePath,$imageFileType);
+            $newFileNameAdmin=$filenameAdmin.time().".".$imageFileType;
+		    if (move_uploaded_file($_FILES["changeImageFileAboutContact"]["tmp_name"], "../images/".$newFileName)) {
 
-		    	$delPrevImagesAboutContact = "SELECT path FROM images WHERE owner = 'company' AND idowner = '1'";
+		    	$delPrevImagesAboutContact = "SELECT idimages, path FROM images WHERE owner = 'company' AND idowner = '1'";
 		    	if($resultAboutContact = mysqli_query($conn, $delPrevImagesAboutContact)){
 					if(mysqli_num_rows($resultAboutContact) > 0){
 						$rowDeleteAboutContact = mysqli_fetch_array($resultAboutContact);
+						$idImagesAboutContact = $rowDeleteAboutContact['idimages'];
 						$pathImagesAboutContact = $rowDeleteAboutContact['path'];
 						unlink("../".$pathImagesAboutContact);
 					}
 				}
 
-				$updateChangeImagesFile = "UPDATE images SET path = '".$filePath."' WHERE owner = 'company' AND idowner = '1'";
+				$updateChangeImagesFile = "UPDATE images SET path = 'images/".$newFileNameAdmin."' WHERE owner = 'company' AND idowner = '1'";
 				if(mysqli_query($conn, $updateChangeImagesFile)){
-
+					logging($now, $user, "Update Images Contact", $target_file, $idImagesAboutContact);
 					$postMessages = "Images Updated";
 			        $colorMessages = "green-text";
 					// header('Location: ./index.php?menu=about&cat=contact');
@@ -67,18 +72,49 @@ if(isset($_POST['btnUpdateAboutContact'])){
         $postMessages = "Sorry, there was an error changing your file.";
     	$colorMessages = "red-text";
     }
+    // ======================================= LOGING
+    $upcompanyQry = "SELECT
+				company.idcompany,
+				company.name,
+				outlet.idoutlet,
+				outlet.address
+				FROM company, outlet";
 
+	if($upresultCompanyQry = mysqli_query($conn, $upcompanyQry)){
+		if(mysqli_num_rows($upresultCompanyQry) > 0){
+			$uprowCompanyQry = mysqli_fetch_array($upresultCompanyQry);
+			$upidcompany    	= $uprowCompanyQry['idcompany'];
+			$upnameCompany  	= $uprowCompanyQry['name'];
+			$upidoutlet       	= $uprowCompanyQry['idoutlet'];
+			$upaddressoutlet  	= $uprowCompanyQry['address'];
+
+			$upphoneCompanyQry = "SELECT * FROM phone WHERE idoutlet = '".$upidoutlet."' LIMIT 1";
+			if($upresultPhoneCompanyQry = mysqli_query($conn, $upphoneCompanyQry)){
+				if(mysqli_num_rows($upresultPhoneCompanyQry) > 0){
+					$uprowPhoneCompanyQry = mysqli_fetch_array($upresultPhoneCompanyQry);
+					$upidphone      = $uprowPhoneCompanyQry['idphone'];
+					$upphoneCompany = $uprowPhoneCompanyQry['phone'];
+					$upfaxCompany   = $uprowPhoneCompanyQry['fax'];
+				}
+			}
+		}
+	}
+    // ======================================= LOGING
     $updateCompanyQry	= "UPDATE company SET name = '".$postnameCompany."'";
     $updateOutletQry 	= "UPDATE outlet SET address = '".$postaddressCompany."'";
     $updatePhoneQry 	= "UPDATE phone SET phone = '".$postphoneCompany."', fax = '".$postfaxCompany."'";
 
-    if (mysqli_query($conn, $updateCompanyQry) && mysqli_query($conn, $updateOutletQry) && mysqli_query($conn, $updatePhoneQry)){
-	    $postMessages =  "Record update successfully";
-		$colorMessages = "green-text";
-	} else {
-	    $postMessages = "Error updating record: " . mysqli_error($conn);
-    	$colorMessages = "red-text";
-	}
+    if($postnameCompany != $upnameCompany || $postaddressCompany != $upaddressoutlet || $postphoneCompany != $upphoneCompany || $postfaxCompany != $upfaxCompany){
+	    if (mysqli_query($conn, $updateCompanyQry) && mysqli_query($conn, $updateOutletQry) && mysqli_query($conn, $updatePhoneQry)){
+	    	$loggingContentText = "Old Name : ".$upnameCompany."<br>Old Address : ".$upaddressoutlet."<br>Old Phone : ".$upphoneCompany."<br>Old Fax : ".$upfaxCompany."<br><br>New Name : ".$postnameCompany."<br>New Address : ".$postaddressCompany."<br>New Phone : ".$postphoneCompany."<br>New Fax : ".$postfaxCompany;
+	    	logging($now, $user, "Update Company", $loggingContentText, '1');
+		    $postMessages =  "Record update successfully";
+			$colorMessages = "green-text";
+		} else {
+		    $postMessages = "Error updating record: " . mysqli_error($conn);
+	    	$colorMessages = "red-text";
+		}
+    }
 }
 
 $companyQry = "SELECT

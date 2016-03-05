@@ -1,24 +1,12 @@
-<?php
-$cat = isset($_GET['cat'])?$_GET['cat']:'';
-?>
 <div class="row">
+    <div class="col s12 center">
+        <h3 class="black-text">GALLERY</h3>
+    </div>
     <div class="container">
-        <div class="col s12">
-            <h3 class="center">
-                <?php
-                    if($cat == 'product'){
-                        echo "PRODUCT GALLERY";
-                    }elseif($cat == 'project'){
-                        echo "PROJECT GALLERY";
-                    }else{
-                        echo "PRODUCT GALLERY";
-                    }
-                ?>
-            </h3>
-        </div>
-        <div class="col s12 center">
+        <!-- LIST OF ALBUMS -->
+        <div class="row">
             <?php
-                if(isset($_GET['detail'])){
+                if (isset($_GET['album'])){
                     include 'gallery-detail.php';
                 }else{
                     include 'gallery-home.php';

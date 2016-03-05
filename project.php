@@ -1,7 +1,11 @@
 <div class="row">
     <?php
         switch ($cat) {
-          case 'list':
+          case 'engineering':
+            include 'project-list.php';
+            break;
+
+          case 'civil':
             include 'project-list.php';
             break;
 

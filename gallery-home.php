@@ -1,69 +1,49 @@
 <?php
-	if($cat == 'product')  {
-		$prodGallery = "SELECT
-                    idproduct,
-                    name
-                    FROM product";
-	    if($resultProdGallery = mysqli_query($conn, $prodGallery) or die("Query failed :".mysqli_error($conn))){
-	        if(mysqli_num_rows($resultProdGallery) > 0){
-	            while($rowProdGallery = mysqli_fetch_array($resultProdGallery)){
-	                $idProduct          	= $rowProdGallery['idproduct'];
-	                $nameProdGallery       	= $rowProdGallery['name'];
+    $albumQry = "SELECT * FROM gallery ORDER BY idgallery DESC";
+    if($resultAlbumsQry = mysqli_query($conn, $albumQry)){
+        if(mysqli_num_rows($resultAlbumsQry) > 0){
+            while ($rowAlbumtQry = mysqli_fetch_array($resultAlbumsQry)) {
+                $idAlbum        = $rowAlbumtQry['idgallery'];
+                $nameAlbum      = $rowAlbumtQry['name'];
 
-	                $imagesProdGallery = "SELECT path FROM images WHERE (owner = 'Product' AND idowner = '".$idProduct."') ORDER BY RAND() LIMIT 1";
-					if ($resultImagesProdGallery = mysqli_query($conn, $imagesProdGallery)) {
-			        	if (mysqli_num_rows($resultImagesProdGallery) > 0) {
-							$rowImagesProdGallery 	= mysqli_fetch_array($resultImagesProdGallery);
-							$pathImagesProdGallery  	= $rowImagesProdGallery['path'];
-							?>
-								<div class="col l3 m6 s12 mt-30 mb-30 center">
-									<div style="height:300px"class="col s12">
-										<a href="./index.php?menu=gallery&cat=product&detail=<?php echo $idProduct;?>">
-											<img class="responsive-img" src="<?php echo $pathImagesProdGallery;?>">
-										</a>
-									</div>
-									<div class="col s12">
-										<h5 class="bold center"><?php echo $nameProdGallery;?></h5>
-									</div>
-								</div>
-							<?php
-						}
-					}
-	            }
-	        }
-	    }
-	}elseif($cat == 'project'){
-		$projectGallery = "SELECT 
-                    idproject,
-                    name
-                    FROM project";
-	    if($resultProjectGallery = mysqli_query($conn, $projectGallery) or die("Query failed :".mysqli_error($conn))){
-	        if(mysqli_num_rows($resultProjectGallery) > 0){
-	            while($rowProjectGallery = mysqli_fetch_array($resultProjectGallery)){
-	                $idProject          = $rowProjectGallery['idproject'];
-	                $nameProjectGallery	= $rowProjectGallery['name'];
+                $idProjectQry = "";
+                $idProjectQry = "SELECT idproject FROM project WHERE name = '".$nameAlbum."'";
 
-	                $imagesProjectGallery = "SELECT path FROM images WHERE (owner = 'Project' AND idowner = '".$idProject."') ORDER BY RAND() LIMIT 1";
-					if ($resultImagesProjectGallery = mysqli_query($conn, $imagesProjectGallery)) {
-			        	if (mysqli_num_rows($resultImagesProjectGallery) > 0) {
-							$rowImagesProjectGallery 	= mysqli_fetch_array($resultImagesProjectGallery);
-							$pathImagesProjectGallery  	= $rowImagesProjectGallery['path'];
-							?>
-								<div class="col l3 m6 s12 mt-30 mb-30 center">
-									<div style="height:300px" class="col s12">
-										<a href="./index.php?menu=gallery&cat=project&detail=<?php echo $idProject;?>"><img class="responsive-img" src="<?php echo $pathImagesProjectGallery;?>"></a><br/>
-									</div>
-									<div class="col s12">
-										<h5 class="bold center"><?php echo $nameProjectGallery;?></h5>
-									</div>
-								</div>
-							<?php
-						}
-					}
-	            }
-	        }
-	    }
-	}else{
-		header('Location: ./');
-	}
+                if($resultidProject = mysqli_query($conn, $idProjectQry) or die("Query failed :".mysqli_error($conn))){
+                    if(mysqli_num_rows($resultidProject) > 0){
+                        $rowresultidProject = mysqli_fetch_array($resultidProject);
+                        $projectId = $rowresultidProject['idproject'];
+
+                        $projectQry = " OR (owner = 'project' AND idowner = '".$projectId."')";
+                    }else{
+                        $projectQry = "";
+                    }
+                }
+
+                $imagesAlbumQry = "SELECT * FROM images WHERE (owner = 'gallery' AND idowner = '".$idAlbum."')".$projectQry." ORDER BY RAND() LIMIT 1";
+                if($resultImagesAlbumQry = mysqli_query($conn, $imagesAlbumQry)){
+                    if(mysqli_num_rows($resultImagesAlbumQry) > 0){
+                        $rowImagesAlbumQry = mysqli_fetch_array($resultImagesAlbumQry);
+                        $pathAlbum          = $rowImagesAlbumQry['path'];
+                        ?>
+                            <div class="col s12 m6 l3 mt-30 gallery-images-wrapper hoverable">
+                                <a href="<?php echo './index.php?menu=gallery&album='.$idAlbum; ?>">
+                                    <div class="col s12 center height-300 valign-wrapper border-bottom">
+                                        <div class="col s12">
+                                            <img src="<?php echo $pathAlbum;?>" alt="<?php echo $nameAlbum;?>" title="<?php echo $nameAlbum;?>" class="responsive-img" width="250px">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 valign-wrapper center blue-text height-100">
+                                        <div class="col s12">
+                                            <h5 class="center"><?php echo strtoupper($nameAlbum);?></h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        <?php
+                    }
+                }
+            }
+        }
+    }
 ?>

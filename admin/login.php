@@ -3,8 +3,8 @@
 	$textLoginNotif		= '';
 
 	if(isset($_POST['btnLogin'])){
-		$postUsername = mysqli_real_escape_string($conn, $_POST['loginUsername']);
-		$postPassword = mysqli_real_escape_string($conn, $_POST['loginPassword']);
+		$postUsername = $_POST['loginUsername'];
+		$postPassword = $_POST['loginPassword'];
 
 		$loginQry = "SELECT * FROM user WHERE username = '".$postUsername."' AND password = '".$postPassword."'";
 		if($resultLogin = mysqli_query($conn, $loginQry)){
@@ -15,11 +15,16 @@
 				$_SESSION['lastName'] 	= $rowLogin['lastName'];
 				$_SESSION['email']  	= $rowLogin['email'];
 				$_SESSION['privilege']  = $rowLogin['privilege'];
+				$_SESSION['iduser']		= $rowLogin['iduser'];
+				$_SESSION['username']	= $rowLogin['username'];
+
+				$logingContentText = "Username : ".$_SESSION['username']."<br>Name : ".$_SESSION['firstName']." ".$_SESSION['lastName'];
+    			logging($now, $postUsername, "User Login Success", $logingContentText, $iduser);
 				header('Location: ./');
 			}else{
 				$_SESSION['login']	= 'notlogged';
 				$colorLoginNotif	= 'red-text';
-				$textLoginNotif		= 'Username or Password Error..';
+				$textLoginNotif		= 'Username or Password Wrong..';
 			}
 		}
 	}

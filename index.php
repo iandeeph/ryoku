@@ -17,6 +17,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 $brand = isset($_GET['brand'])?$_GET['brand']:'';
 $cat = isset($_GET['cat'])?$_GET['cat']:'';
 
+$companyQry = "";
 $companyQry = "SELECT * FROM company LIMIT 1";
 if($resultCompanyQry = mysqli_query($conn, $companyQry)){
   if(mysqli_num_rows($resultCompanyQry) > 0){
@@ -24,6 +25,7 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
     $idcompany    = $rowCompanyQry['idcompany'];
     $nameCompany  = $rowCompanyQry['name'];
 
+    $imagesCompanyQry = "";
     $imagesCompanyQry = "SELECT * FROM images WHERE owner = 'company' AND idowner = '".$idcompany."' LIMIT 1";
     if($resultImagesCompanyQry = mysqli_query($conn, $imagesCompanyQry)){
       if(mysqli_num_rows($resultImagesCompanyQry) > 0){
@@ -34,6 +36,7 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
       }
     }
 
+    $outletCompanyQry = "";
     $outletCompanyQry = "SELECT * FROM outlet LIMIT 1";
     if($resultOutletCompanyQry = mysqli_query($conn, $outletCompanyQry)){
       if(mysqli_num_rows($resultOutletCompanyQry) > 0){
@@ -43,6 +46,7 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
       }
     }
 
+    $phoneCompanyQry = "";
     $phoneCompanyQry = "SELECT * FROM phone WHERE idoutlet = '".$idoutlet."' LIMIT 1";
     if($resultPhoneCompanyQry = mysqli_query($conn, $phoneCompanyQry)){
       if(mysqli_num_rows($resultPhoneCompanyQry) > 0){
@@ -99,38 +103,31 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
           <div class="nav-wrapper blue darken-4 valign-wrapper">
             <div class="container">
               <div class="row valign-wrapper">
-                <div class="col l3 mt-30">
-                  <form class="hide-on-med-and-down">
-                    <div class="input-field">
-                      <input id="search" type="search" required>
-                      <label class="right" for="search"><i class="right material-icons">search</i></label>
-                      <i class="material-icons">close</i>
+                <a href="#" data-activates="mobile-demo" class="button-collapse left mt-10"><i class="material-icons">menu</i></a>
+                <div class="col s12 right">
+                  <div class="nav-wrapper blue darken-4 hide-on-large-only">
+                    <div class="container hide-on-large-only">
+                      <a href="./" class="center brand-logo mt-10"><img title="<?php echo $nameCompany?>" alt="<?php echo $titleCompany?>" src="<?php echo $pathCompany?>" width="85px"></a>
                     </div>
-                  </form>
-                </div>
-                <a href="#" data-activates="mobile-demo" class="button-collapse left"><i class="material-icons">menu</i></a>
-                <form class="hide-on-large-only valign">
-                  <div class="input-field">
-                    <input id="search" type="search" required>
-                    <label for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
                   </div>
-                </form>
-                <div class="col l9 right">
-                  <ul id="galleryDropDown" class="dropdown-content mt-50">
-                    <li><a href="./index.php?menu=gallery&cat=project">Project</a></li>
-                    <li><a href="./index.php?menu=gallery&cat=product">Product</a></li>
-                  </ul>
                   <ul id="projectDropDown" class="dropdown-content mt-50">
-                    <li><a href="./index.php?menu=project&cat=experience">Experience</a></li>
-                    <li><a href="./index.php?menu=project&cat=list">Detail</a></li>
+                    <li><a href="./index.php?menu=project&cat=engineering">Engineering</a></li>
+                    <li class="divider"></li>
+                    <li><a href="./index.php?menu=project&cat=civil">Civil Construction</a></li>
+                    <li class="divider"></li>
+                    <li><a href="./index.php?menu=project&cat=experience">Experience List</a></li>
+                  </ul>
+                  <ul id="productDropDown" class="dropdown-content mt-50">
+                    <li><a href="./index.php?menu=product&cat=engineering">Engineering</a></li>
+                    <li class="divider"></li>
+                    <li><a href="./index.php?menu=product&cat=civil">Civil Construction</a></li>
                   </ul>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li class="<?php echo ($menu == 'home')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=home">Home</a></li>
                     <li class="<?php echo ($menu == 'about')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=about">About</a></li>
-                    <li class="<?php echo ($menu == 'product')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=product">Product</a></li>
+                    <li class="<?php echo ($menu == 'product')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="productDropDown">Product<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
                     <li class="<?php echo ($menu == 'project')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="projectDropDown">Project<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
-                    <li class="<?php echo ($menu == 'gallery')? "active" : "";?>"><a class="menu-btn dropdown-button" href="#!" data-activates="galleryDropDown">Gallery<i class="material-icons right mt-30">arrow_drop_down</i></a></li>
+                    <li class="<?php echo ($menu == 'gallery')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=gallery">Gallery</a></li>
                     <li class="<?php echo ($menu == 'contact')? "active" : "";?>"><a class="menu-btn" href="./index.php?menu=contact">Contact</a></li>
                   </ul>
                 </div>
@@ -139,30 +136,43 @@ if($resultCompanyQry = mysqli_query($conn, $companyQry)){
             <ul class="side-nav" id="mobile-demo">
               <li class="bold <?php echo ($menu == 'home')? "active" : "";?>"><a href="./index.php?menu=home">Home</a></li>
               <li class="bold <?php echo ($menu == 'about')? "active" : "";?>"><a href="./index.php?menu=about">About</a></li>
-              <li class="bold <?php echo ($menu == 'product')? "active" : "";?>"><a href="./index.php?menu=product">Product</a></li>
-              <li class="bold <?php echo ($menu == 'project')? "active" : "";?>"><a href="./index.php?menu=project">Project</a></li>
-              <li class="bold no-padding <?php echo ($menu == 'gallery')? "active" : "";?>">
+              <li class="bold no-padding <?php echo ($menu == 'product')? "active" : "";?>">
                 <ul class="collapsible" data-colapsible="accordion">
-                  <li class="<?php echo ($menu == 'gallery')? "active" : "";?>">
-                    <a class="collapsible-header <?php echo ($menu == 'gallery')? "active" : "";?>">Gallery</a>
+                  <li class="<?php echo ($menu == 'product')? "active" : "";?>">
+                    <a class="collapsible-header <?php echo ($menu == 'product')? "active" : "";?>">Product</a>
                     <div class="collapsible-body">
                       <ul>
-                        <li class="bold <?php echo ($menu == 'gallery' && $cat == 'project')? "active" : "";?>"><a href="./index.php?menu=gallery&cat=project">Project</a></li>
-                        <li class="bold <?php echo ($menu == 'gallery' && $cat == 'product')? "active" : "";?>"><a href="./index.php?menu=gallery&cat=product">Product</a></li>
+                        <li class="bold <?php echo ($menu == 'product' && $cat == 'engineering')? "active" : "";?>"><a href="./index.php?menu=product&cat=engineering">Engineering</a></li>
+                        <li class="bold <?php echo ($menu == 'product' && $cat == 'civil')? "active" : "";?>"><a href="./index.php?menu=product&cat=civil">Civil Construction</a></li>
                       </ul>
                     </div>
                   </li> 
                 </ul>
               </li>
+              <li class="bold no-padding <?php echo ($menu == 'project')? "active" : "";?>">
+                <ul class="collapsible" data-colapsible="accordion">
+                  <li class="<?php echo ($menu == 'project')? "active" : "";?>">
+                    <a class="collapsible-header <?php echo ($menu == 'project')? "active" : "";?>">Product</a>
+                    <div class="collapsible-body">
+                      <ul>
+                        <li class="bold <?php echo ($menu == 'engineering' && $cat == 'project')? "active" : "";?>"><a href="./index.php?menu=project&cat=engineering">Engineering</a></li>
+                        <li class="bold <?php echo ($menu == 'civil' && $cat == 'product')? "active" : "";?>"><a href="./index.php?menu=project&cat=civil">Civil Construction</a></li>
+                        <li class="bold <?php echo ($menu == 'experience' && $cat == 'product')? "active" : "";?>"><a href="./index.php?menu=project&cat=experience">Experience List</a></li>
+                      </ul>
+                    </div>
+                  </li> 
+                </ul>
+              </li>
+              <li class="bold"><a href="./index.php?menu=gallery">Gallery</a></li>
               <li class="bold"><a href="./index.php?menu=contact">Contact</a></li>
             </ul>
           </div>
         </nav>
       </div>
-      <nav>
+      <nav class="hide-on-med-and-down">
         <div class="nav-wrapper blue darken-2">
           <div class="container">
-            <a href="#!" class="center brand-logo"><img title="<?php echo $nameCompany?>" alt="<?php echo $titleCompany?>" src="<?php echo $pathCompany?>" width="110px"></a>
+            <a href="./" class="center brand-logo"><img title="<?php echo $nameCompany?>" alt="<?php echo $titleCompany?>" src="<?php echo $pathCompany?>" width="110px"></a>
           </div>
         </div>
       </nav>

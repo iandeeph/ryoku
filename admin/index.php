@@ -15,8 +15,41 @@ foreach($_POST as $key => $val) {
 
 $menu = isset($_GET['menu'])?$_GET['menu']:'';
 $cat = isset($_GET['cat'])?$_GET['cat']:'';
+$user = (isset($_SESSION['login']) && $_SESSION['login'] == "logged" )?$_SESSION['firstName']." ".$_SESSION['lastName']:'';
+$now = date("Y-m-d H:i:s");
 
-?><!DOCTYPE html>
+function logging($date, $user, $action, $value, $iditem){
+	require "../sql/connect.php";
+	$insertLogQry = "";
+	$insertLogQry = "INSERT INTO log (date, user, action, value, iditem) VALUES ('".$date."', '".$user."', '".$action."', '".$value."', '".$iditem."')";
+	if(!mysqli_query($conn, $insertLogQry)){
+    	echo "ERROR: Could not able to execute ".$insertLogQry.". " . mysqli_error($conn);
+    }else{
+    	echo $insertLogQry;
+    }
+}
+
+$companyLogoQry = "";
+$companyLogoQry = "SELECT * FROM company LIMIT 1";
+if($resultCompanyLogoQry = mysqli_query($conn, $companyLogoQry)){
+	if(mysqli_num_rows($resultCompanyLogoQry) > 0){
+		$rowCompanyLogoQry = mysqli_fetch_array($resultCompanyLogoQry);
+		$idCompany  = $rowCompanyLogoQry['idcompany'];
+
+		$imagesLogoCompanyQry = "";
+		$imagesLogoCompanyQry = "SELECT path FROM images WHERE owner = 'company' AND idowner = '".$idCompany."' LIMIT 1";
+		if($resultImagesLogoCompanyQry = mysqli_query($conn, $imagesLogoCompanyQry)){
+			if(mysqli_num_rows($resultImagesLogoCompanyQry) > 0){
+				$rowImagesLogoCompanyQry = mysqli_fetch_array($resultImagesLogoCompanyQry);
+				$pathLogoCompany    = $rowImagesLogoCompanyQry['path'];
+			}else{
+				$pathLogoCompany = "";
+			}
+		}
+	}
+}
+?>
+<!DOCTYPE html>
 <html>
   <head>
     <!--Import Google Icon Font-->
@@ -41,6 +74,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
     <link rel="icon" type="image/png" sizes="32x32" href="../icon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="../icon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../icon/favicon-16x16.png">
+    <link rel="alternate" href="http://example.com/en" hreflang="en" />
     <link rel="manifest" href="../icon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="../icon/ms-icon-144x144.png">
@@ -51,11 +85,11 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
   </head>
   <body>
 		<header>
-			<div class="navbar-fixed">
-				<nav>
-					<div class="nav-wrapper navbar-fixed grey darken-3 valign-wrapper">
-						<a href="#" data-activates="side-menu" class="button-collapse left"><i class="menu-side-icon material-icons">menu</i></a>
-						<a href="#!" class="center brand-logo"><img src="../images/logo.png" width="110px"></a>
+			<div class="navbar-fixed grey darken-3">
+				<nav class="grey darken-3">
+					<div class="nav-wrapper navbar-fixed grey darken-3 valign-wrapper left-menu">
+						<a href="#" data-activates="side-menu" class="button-collapse left ml-30"><i class="menu-side-icon material-icons">menu</i></a>
+						<a href="./" class="center brand-logo"><img class="admin-logo" src="<?php echo "../".$pathLogoCompany; ?>"></a>
 						<div style="width:100%" class="hide-on-med-and-down"><h4 class="right-align mr-30">Admin Control Panel</h4></div>
 					</div>
 				</nav>
@@ -65,8 +99,8 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 		  			$firstName = $_SESSION['firstName'];
 		  			$lastName = $_SESSION['lastName'];
 		  			?>
-						<ul id="side-menu" class="side-nav fixed" style="width: 240px; top: 100px; height:90%">
-							<li class="bold" disabled>Hi, <?php echo $firstName." ".$lastName;?></li>
+						<ul id="side-menu" class="side-nav fixed">
+							<li class="bold height-100 valign-wrapper" disabled>Hi, <?php echo $firstName." ".$lastName;?></li>
 							<li class="divider"></li>
 							<li class="bold no-padding" <?php echo ($menu == 'home')? "active" : "";?>>
 								<ul class="collapsible" data-colapsible="accordion">
@@ -83,19 +117,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 								  </li>
 								</ul>
 							</li>
-							<li class="bold no-padding" <?php echo ($menu == 'product')? "active" : "";?>>
-								<ul class="collapsible" data-colapsible="accordion">
-								  <li class=" <?php echo ($menu == 'product')? "active" : "";?>">
-								    <a class="collapsible-header <?php echo ($menu == 'product')? "active" : "";?>"><i class="menu-side-icon material-icons left">toys</i>Product</a>
-								    <div class="collapsible-body">
-								      <ul>
-								        <li class="bold <?php echo ($menu == 'product' && $cat == 'list')? "active" : "";?>"><a href="./index.php?menu=product&cat=list">Product List</a></li>
-								        <li class="bold <?php echo ($menu == 'product' && $cat == 'brand')? "active" : "";?>"><a href="./index.php?menu=product&cat=brand">Brand</a></li>
-								      </ul>
-								    </div>
-								  </li>
-								</ul>
-							</li>
+							<li class="bold <?php echo ($menu == 'product')? "active" : "";?>"><a href="./index.php?menu=product"><i class="menu-side-icon material-icons mt-20 left">toys</i>Product</a></li>
 							<li class="bold no-padding" <?php echo ($menu == 'project')? "active" : "";?>>
 								<ul class="collapsible" data-colapsible="accordion">
 								  <li class=" <?php echo ($menu == 'project')? "active" : "";?>">
@@ -109,10 +131,12 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 								  </li>
 								</ul>
 							</li>
+							<li class="bold <?php echo ($menu == 'gallery')? "active" : "";?>"><a href="./index.php?menu=gallery"><i class="menu-side-icon material-icons mt-20 left">collections</i>Gallery</a></li>
 							<?php
 								if($_SESSION['privilege'] == '1'){
 									?>
 										<li class="bold <?php echo ($menu == 'user')? "active" : "";?>"><a href="./index.php?menu=user"><i class="menu-side-icon material-icons mt-20 left">person</i>User</a></li>
+										<li class="bold <?php echo ($menu == 'log')? "active" : "";?>"><a href="./index.php?menu=log"><i class="menu-side-icon material-icons mt-20 left">content_paste</i>Activity Log</a></li>
 									<?php
 								}
 							?>
@@ -147,8 +171,17 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 			            include 'project.php';
 			            break;
 
+			          case 'gallery':
+			            include 'gallery.php';
+			            break;
+
+
 			          case 'user':
 			            include 'user.php';
+			            break;
+
+			          case 'log':
+			            include 'log.php';
 			            break;
 
 			          case 'visitor':
@@ -160,7 +193,7 @@ $cat = isset($_GET['cat'])?$_GET['cat']:'';
 			            break;
 
 			          default:
-			            include 'about.php';
+			            include 'welcome.php';
 			            break;
 			        }
 			    }

@@ -15,16 +15,8 @@
 	        $postMessages = "Message has been sent. Thank you for your inqury, We will contact you soon..";
         	$colorMessages = "green-text";
 
-        	// ========================================= sedning email to every user
-        	if($resulEmailQry = mysqli_query($conn, "SELECT * FROM user")){
-				if (mysqli_num_rows($resulEmailQry) > 0) {
-					while ($rowUser = mysqli_fetch_array($resulEmailQry)) {
-						$email[] = $rowUser['email'];
-					}
-				}
-			}
-			$listEmail = join(', ', $email);
-        	$to = $listEmail;
+        	// ========================================= sedning email to Director
+        	$to = "saiful@ryokupetrojayamandiri.co.id";
 			$subject = "New Visitor Inqury from Web..";
 
 			$message = "
@@ -58,7 +50,11 @@
 						<tr>
 							<td>Message</td>
 							<td>:</td>
-							<td>".$postMessage."</td>
+							<td>
+								<p>
+								".str_replace('\r\n', '<br>', $postMessage)."
+								</p>
+							</td>
 						</tr>
 					</table>
 				</body>
@@ -70,7 +66,7 @@
 			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
 			// More headers
-			$headers .= 'From: <kristian@cermati.com>' . "\r\n";
+			$headers .= 'From: <marketing@ryokupetrojayamandiri.co.id>' . "\r\n";
 
 			mail($to,$subject,$message,$headers);
 	    }else{
